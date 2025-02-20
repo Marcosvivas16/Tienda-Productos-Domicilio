@@ -1,1 +1,4 @@
-# Trabajo-Proyecto-Software
+# Tienda Productos Domicilio
+
+## Planificación
+![Planificación](nombre_fichero.png)
