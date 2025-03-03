@@ -1,4 +1,9 @@
 # Tienda Productos Domicilio
 
 ## Planificación
-![Planificación](nombre_fichero.png)
+![Planificación]
+(Diagrama de Gantt)
+
+## Roles 
+
+## Calendario de Prototipos
