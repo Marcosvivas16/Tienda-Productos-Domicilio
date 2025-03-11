@@ -7,7 +7,7 @@ Este documento contiene la planificación detallada del proyecto, con fases, tar
 ## **Fase 1: Configuración y Organización**
 | **Tarea** | **Inicio** | **Fin** | **Duración** | **Responsables** |
 |-----------|-----------|---------|-------------|----------------|
-| Crear repositorio en GitHub | 11-mar | 11-mar | 1 día | Todo el equipo |
+| Crear repositorio en GitHub | 4-mar | 4-mar | 1 día | Todo el equipo |
 | Definir milestones e issues en GitHub | 12-mar | 13-mar | 2 días | Todo el equipo |
 | Configurar GitHub Projects (Kanban) | 12-mar | 14-mar | 3 días | Hatim |
 | Crear estructura inicial del proyecto | 13-mar | 15-mar | 3 días | Todo el equipo |
@@ -63,6 +63,6 @@ Este documento contiene la planificación detallada del proyecto, con fases, tar
 ---
 
 ## 📌 **Notas Finales**
-- 📅 **Fecha de inicio del proyecto:** 11 de marzo de 2025.
+- 📅 **Fecha de inicio del proyecto:** 4 de marzo de 2025.
 - 🎯 **Entrega y presentación final:** 5 y 6 de mayo de 2025.
 - 🚀 **Objetivo:** Completar el desarrollo, pruebas y despliegue a tiempo.
