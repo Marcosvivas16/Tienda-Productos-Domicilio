@@ -47,8 +47,7 @@ La aplicación estará disponible en: [http://localhost:5173](http://localhost:5
   
 ## ⏳ Planificación
 
-![Planificación]
-(Diagrama de Gantt)
+[Cronograma](/docs/cronograma.md)
 
 ## 👥 Roles
 
