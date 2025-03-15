@@ -52,3 +52,15 @@ La aplicación estará disponible en: [http://localhost:5173](http://localhost:5
 ## 👥 Roles
 
 ## 🗓️ Calendario de Prototipos
+
+## 📅 Planificación del Proyecto - Diagrama de Gantt
+
+A continuación se muestra el diagrama de Gantt dividido en dos partes para una mejor visualización.
+
+### **🔹 Parte 1: Inicio del Proyecto**
+![Diagrama de Gantt - Parte 1](docs/diagrama_gantt_1.png)
+
+### **🔹 Parte 2: Desarrollo**
+![Diagrama de Gantt - Parte 2](docs/diagrama_gantt_2.png)
+
+---
