@@ -57,10 +57,10 @@ La aplicación estará disponible en: [http://localhost:5173](http://localhost:5
 
 A continuación se muestra el diagrama de Gantt dividido en dos partes para una mejor visualización.
 
-### **🔹 Parte 1: Inicio del Proyecto**
+### **🔹 Parte 1: Inicio del Proyecto, Configuración y Diseño**
 ![Diagrama de Gantt - Parte 1](docs/diagrama_gantt_1.png)
 
-### **🔹 Parte 2: Desarrollo**
+### **🔹 Parte 2: Desarrollo, Pruebas y Entrega**
 ![Diagrama de Gantt - Parte 2](docs/diagrama_gantt_2.png)
 
 ---
