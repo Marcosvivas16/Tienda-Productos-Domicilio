@@ -1,0 +1,17 @@
+.producto {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    width: 180px;
+    border-radius: 5px;
+  }
+
+  
+.producto img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover; 
+    border-radius: 5px;
+  }
+
