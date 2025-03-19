@@ -17,7 +17,7 @@
   
   .logo {
     text-decoration: none;
-    color: #FF5722;
+    color: #2196F3;
   }
   
   .logo h1 {
@@ -44,7 +44,7 @@
   }
   
   .search-bar input:focus {
-    border-color: #FF5722;
+    border-color: #2196F3;
     box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);
   }
   
@@ -53,7 +53,7 @@
     right: 5px;
     top: 50%;
     transform: translateY(-50%);
-    background-color: #FF5722;
+    background-color: #2196F3;
     border: none;
     color: white;
     height: 35px;
@@ -67,7 +67,7 @@
   }
   
   .search-button:hover {
-    background-color: #E64A19;
+    background-color: #2196F3;
   }
   
   .nav-buttons {
@@ -86,7 +86,7 @@
   }
   
   .nav-button:hover {
-    color: #FF5722;
+    color: #2196F3;
   }
   
   .nav-button i {
@@ -102,7 +102,7 @@
     position: absolute;
     top: -8px;
     right: -8px;
-    background-color: #FF5722;
+    background-color: #2196F3;
     color: white;
     font-size: 0.7rem;
     height: 18px;
