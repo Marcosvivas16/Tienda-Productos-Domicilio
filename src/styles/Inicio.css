@@ -1,0 +1,221 @@
+.inicio-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    height: 500px;
+    border-radius: 15px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+      url('https://images.pexels.com/photos/1660030/pexels-photo-1660030.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hero-content {
+    color: white;
+    padding: 0 60px;
+    max-width: 600px;
+  }
+  
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+  
+  .btn-explorar {
+    display: inline-block;
+    background-color: #2196F3; /* Cambiado a azul */
+    color: white;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4); /* Cambiado a azul */
+  }
+  
+  .btn-explorar:hover {
+    background-color: #1976D2; /* Azul oscuro */
+    transform: translateY(-2px);
+  }
+  
+  /* Categorías */
+  .categorias-section {
+    margin-bottom: 50px;
+  }
+  
+  .categorias-section h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .categorias-section h2:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background-color: #2196F3; /* Cambiado a azul */
+  }
+  
+  .categorias-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  .categoria-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .categoria-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .categoria-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+  
+  .categoria-card h3 {
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  /* Promociones */
+  .promociones-section {
+    margin-bottom: 50px;
+  }
+  
+  .promociones-section h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .promociones-section h2:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background-color: #2196F3; /* Cambiado a azul */
+  }
+  
+  .promociones-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .promo-card {
+    height: 200px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .promo-card:first-child {
+    background-image: linear-gradient(135deg, #2196F3, #1976D2); /* Cambiado a azul */
+  }
+  
+  .promo-card:last-child {
+    background-image: linear-gradient(135deg, #1976D2, #0D47A1); /* Azul más oscuro */
+  }
+  
+  .promo-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .promo-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .promo-code {
+    background-color: white;
+    color: #2196F3; /* Cambiado a azul */
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .categorias-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hero-section {
+      height: 400px;
+    }
+    
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .promociones-cards {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-content {
+      padding: 0 30px;
+    }
+    
+    .hero-content h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .categorias-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-section {
+      height: 350px;
+    }
+  }
