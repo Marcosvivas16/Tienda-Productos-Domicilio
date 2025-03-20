@@ -25,9 +25,9 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
 ### Ejecutar la Aplicación en Modo Desarrollo
 
-    npm run dev
+    npm start
 
-La aplicación estará disponible en: [http://localhost:5173](http://localhost:5173)
+La aplicación estará disponible en: [http://localhost:3000](http://localhost:3000)
 
 ## 🤝 Contribución
 
