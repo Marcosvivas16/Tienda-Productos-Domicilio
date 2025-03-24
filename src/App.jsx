@@ -5,7 +5,7 @@ import Inicio from "./home/Inicio";
 import Productos from "./home/Productos";
 import Carrito from "./pages/Carrito";
 import Perfil from "./pages/Perfil";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./styles/App.css";
