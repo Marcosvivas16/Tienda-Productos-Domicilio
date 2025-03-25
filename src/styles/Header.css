@@ -18,6 +18,8 @@
   .logo {
     text-decoration: none;
     color: #2196F3;
+    display: flex;
+    align-items: center;
   }
   
   .logo h1 {
@@ -26,6 +28,15 @@
     margin: 0;
   }
   
+  .logo-img {
+    height: 35px; /* Altura similar a la barra de búsqueda */
+    width: auto;
+    transition: transform 0.2s ease;
+  }
+
+  .logo-img:hover {
+      transform: scale(1.05);
+  }
   .search-bar {
     flex-grow: 1;
     max-width: 500px;
@@ -161,27 +172,34 @@
     color: #666;
   }
   
-  /* Responsive */
   @media (max-width: 992px) {
     .search-bar {
-      max-width: 300px;
+        max-width: 300px;
+    }
+    
+    .logo-img {
+        height: 32px; /* Pequeño ajuste para tablets */
     }
   }
-  
+    
   @media (max-width: 768px) {
-    .nav-buttons {
-      display: none;
-    }
-    
-    .search-bar {
-      display: none;
-    }
-    
-    .menu-toggle {
-      display: block;
-    }
-    
-    .mobile-menu {
-      display: block;
-    }
+      .nav-buttons {
+          display: none;
+      }
+      
+      .search-bar {
+          display: none;
+      }
+      
+      .menu-toggle {
+          display: block;
+      }
+      
+      .mobile-menu {
+          display: block;
+      }
+
+      .logo-img {
+        height: 28px; /* Más pequeño para móviles */
+      }
   }
