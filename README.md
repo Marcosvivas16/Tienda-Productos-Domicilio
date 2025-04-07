@@ -64,3 +64,16 @@ A continuación se muestra el diagrama de Gantt dividido en dos partes para una 
 ![Diagrama de Gantt - Parte 2](docs/diagrama_gantt_2.png)
 
 ---
+
+## 📅 Diagrama de Gantt (Actualizado a 7 de abril de 2025)
+
+A continuación se muestra el avance real del proyecto en dos partes:
+
+### 🔹 Parte 1 – Planificación y Diseño
+![Diagrama Gantt Parte 1](docs/diagrama_gantt_actualizado_1.png)
+
+### 🔹 Parte 2 – Desarrollo, Pruebas y Entrega
+![Diagrama Gantt Parte 2](docs/diagrama_gantt_actualizado_2.png)
+
+
+
