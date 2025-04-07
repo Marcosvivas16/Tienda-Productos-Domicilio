@@ -235,6 +235,8 @@
     }
     
     .producto-imagen-container {
-      height: 150px;
+      position: relative;
+      height: 280px; /* antes 200px */
+      overflow: hidden;
     }
   }
