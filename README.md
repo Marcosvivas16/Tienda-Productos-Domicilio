@@ -58,10 +58,10 @@ La aplicación estará disponible en: [http://localhost:3000](http://localhost:3
 A continuación se muestra el diagrama de Gantt dividido en dos partes para una mejor visualización.
 
 ### **🔹 Parte 1: Inicio del Proyecto, Configuración y Diseño**
-![Diagrama de Gantt - Parte 1](docs/diagrama_gantt_1.png)
+![Diagrama de Gantt - Parte 1](docs/planificacion/diagrama_gantt_1.png)
 
 ### **🔹 Parte 2: Desarrollo, Pruebas y Entrega**
-![Diagrama de Gantt - Parte 2](docs/diagrama_gantt_2.png)
+![Diagrama de Gantt - Parte 2](docs/planificacion/diagrama_gantt_2.png)
 
 ---
 
@@ -70,10 +70,31 @@ A continuación se muestra el diagrama de Gantt dividido en dos partes para una 
 A continuación se muestra el avance real del proyecto en dos partes:
 
 ### 🔹 Parte 1 – Planificación y Diseño
-![Diagrama Gantt Parte 1](docs/diagrama_gantt_actualizado_1.png)
+![Diagrama Gantt Parte 1](docs/planificacion/diagrama_gantt_actualizado_1.png)
 
 ### 🔹 Parte 2 – Desarrollo, Pruebas y Entrega
-![Diagrama Gantt Parte 2](docs/diagrama_gantt_actualizado_2.png)
+![Diagrama Gantt Parte 2](docs/planificacion/diagrama_gantt_actualizado_2.png)
 
+---
+
+## 📸 Diseño de la Aplicación
+
+### 🏠 Página de Inicio
+![Inicio](docs/diseño/inicio.png)
+
+### 📦 Categorías Populares y Ofertas
+![Ofertas](docs/diseño/categorias.png)
+
+### 🛍️ Listado de Productos
+![Productos](docs/diseño/listado.png)
+
+### 🧾 Revisión del Pedido
+![Revisar Pedido](docs/diseño/pedido.png)
+
+### 📬 Formulario de Envío
+![Envío](docs/diseño/envio.png)
+
+### 🔐 Iniciar Sesión
+![Login](docs/diseño/sesion.png)
 
 
