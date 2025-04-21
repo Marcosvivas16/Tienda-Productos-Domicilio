@@ -50,8 +50,20 @@ La aplicación estará disponible en: [http://localhost:3000](http://localhost:3
 [Cronograma](/docs/cronograma.md)
 
 ## 👥 Roles
+| Nombre          | Rol                           | Responsabilidades principales                                      |
+|-----------------|-------------------------------|--------------------------------------------------------------------|
+| Hatim Bajji     | Documentación y organización  | Coordinación general, planificación (Gantt), backend, documentación|
+| Marcos Vivas    | Responsable de Frontend       | UI/UX, maquetación en React, diseño de prototipos                  |
+| Diego Vallespín | Responsable de Backend        | API REST, conexión con base de datos, lógica de negocio            |
+| Todo el equipo  | QA y Testing                  | Pruebas funcionales, revisión conjunta, feedback                   |
 
 ## 🗓️ Calendario de Prototipos
+| Fecha         | Prototipo                                 | Objetivo                                   | Responsable     |
+|---------------|-------------------------------------------|--------------------------------------------|-----------------|
+| **18 marzo**  | Prototipo inicial estático (HTML/CSS)     | Estructura base de la interfaz             | Hatim           |
+| **20 marzo**  | Prototipo con navegación simulada         | Flujo visual entre pantallas               | Marcos + Hatim  |
+| **22 marzo**  | Prototipo interactivo con datos simulados | Interacción y lógica básica                | Marcos + Diego  |
+| **23 marzo**  | Validación del prototipo con equipo       | Feedback conjunto y ajustes finales        | Todo el equipo  |
 
 ## 📅 Planificación del Proyecto - Diagrama de Gantt
 
