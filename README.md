@@ -81,7 +81,7 @@ A continuación se muestra el avance real del proyecto en dos partes:
 
 A continuación se muestra el avance real del proyecto:
 ### 🔹 Desarrollo, Pruebas y Entrega
-![Diagrama Gantt](docs/planificacion/diagrama_gantt_actualizado_21a.png.png)
+![Diagrama Gantt](docs/planificacion/diagrama_gantt_actualizado_21a.png)
 
 ---
 
