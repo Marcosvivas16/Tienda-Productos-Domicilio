@@ -1,0 +1,358 @@
+.detalle-producto-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .detalle-producto-navegacion {
+    margin-bottom: 20px;
+    color: #777;
+  }
+  
+  .detalle-producto-navegacion a {
+    color: #2196F3;
+    text-decoration: none;
+  }
+  
+  .detalle-producto-navegacion a:hover {
+    text-decoration: underline;
+  }
+  
+  .detalle-producto-principal {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .detalle-producto-imagenes {
+    flex: 0 0 55%;
+  }
+  
+  .imagen-principal {
+    position: relative;
+    margin-bottom: 15px;
+  }
+  
+  .imagen-principal img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .etiqueta-oferta {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #ff4757;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  
+  .imagenes-adicionales {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .imagen-adicional {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+  }
+  
+  .imagen-adicional.active {
+    border-color: #2196F3;
+  }
+  
+  .imagen-adicional img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+  
+  .imagen-adicional:hover img {
+    transform: scale(1.1);
+  }
+  
+  .detalle-producto-info {
+    flex: 1;
+  }
+  
+  .detalle-producto-nombre {
+    font-size: 2rem;
+    margin: 0 0 15px 0;
+    color: #333;
+  }
+  
+  .detalle-producto-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .detalle-producto-valoracion {
+    display: flex;
+    align-items: center;
+  }
+  
+  .estrellas {
+    color: #ffa41c;
+    margin-right: 5px;
+  }
+  
+  .valoracion-numero {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .detalle-producto-categoria {
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .detalle-producto-precio {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .precio-anterior {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 1.1rem;
+  }
+  
+  .precio-actual {
+    color: #2196F3;
+    font-weight: 700;
+    font-size: 2rem;
+  }
+  
+  .porcentaje-descuento {
+    background-color: #ff4757;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .detalle-producto-disponibilidad {
+    margin-bottom: 20px;
+  }
+  
+  .en-stock {
+    color: #4CAF50;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+  }
+  
+  .sin-stock {
+    color: #F44336;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+  }
+  
+  .detalle-producto-descripcion {
+    margin-bottom: 25px;
+  }
+  
+  .detalle-producto-descripcion h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .detalle-producto-descripcion p {
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  .detalle-producto-especificaciones {
+    margin-bottom: 25px;
+  }
+  
+  .detalle-producto-especificaciones h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .detalle-producto-especificaciones ul {
+    padding-left: 20px;
+  }
+  
+  .detalle-producto-especificaciones li {
+    margin-bottom: 5px;
+    color: #666;
+  }
+  
+  .detalle-producto-acciones {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .cantidad-control {
+    display: flex;
+    align-items: center;
+  }
+  
+  .cantidad-control input {
+    width: 60px;
+    height: 44px;
+    text-align: center;
+    border: 1px solid #ddd;
+    margin: 0;
+  }
+  
+  .cantidad-btn {
+    width: 44px;
+    height: 44px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .cantidad-btn:hover {
+    background-color: #eee;
+  }
+  
+  .btn-agregar-carrito {
+    flex: 1;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-agregar-carrito:hover {
+    background-color: #1976D2;
+  }
+  
+  .btn-agregar-carrito:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .detalle-producto-entrega {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+  
+  .entrega-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .entrega-info i {
+    font-size: 1.2rem;
+    color: #2196F3;
+  }
+  
+  .entrega-info h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 1rem;
+  }
+  
+  .entrega-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .productos-relacionados {
+    margin-top: 50px;
+  }
+  
+  .productos-relacionados h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .productos-relacionados h2:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #2196F3;
+  }
+  
+  .productos-relacionados-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .placeholder-mensaje {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px 0;
+    color: #999;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  @media (max-width: 992px) {
+    .detalle-producto-principal {
+      flex-direction: column;
+    }
+    
+    .detalle-producto-entrega {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .detalle-producto-acciones {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .cantidad-control {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .imagenes-adicionales {
+      justify-content: center;
+    }
+  }

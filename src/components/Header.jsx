@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import "../styles/Header.css";
-import logoImage from "../components/img/logo.png";
+import logoImage from "./img/logo.png";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser, logout, isAuthenticated, isGuest } = useAuth();
+  const { cartItems } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
+
+  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <header className="header">
@@ -35,10 +39,14 @@ const Header = () => {
                 <i className="fas fa-user"></i>
                 <span>Mi Perfil</span>
               </Link>
+              <Link to="/historial" className="nav-button historial-button">
+                <i className="fas fa-history"></i>
+                <span>Mis Pedidos</span>
+              </Link>
               <Link to="/carrito" className="nav-button carrito-button">
                 <div className="carrito-icon">
                   <i className="fas fa-shopping-cart"></i>
-                  <span className="carrito-contador">2</span>
+                  {cartItemCount > 0 && <span className="carrito-contador">{cartItemCount}</span>}
                 </div>
                 <span>Carrito</span>
               </Link>
@@ -53,16 +61,32 @@ const Header = () => {
                 <i className="fas fa-sign-in-alt"></i>
                 <span>Iniciar Sesión</span>
               </Link>
+              <Link to="/carrito" className="nav-button carrito-button">
+                <div className="carrito-icon">
+                  <i className="fas fa-shopping-cart"></i>
+                  {cartItemCount > 0 && <span className="carrito-contador">{cartItemCount}</span>}
+                </div>
+                <span>Carrito</span>
+              </Link>
               <div className="nav-button guest-indicator">
                 <i className="fas fa-user-clock"></i>
                 <span>Modo Invitado</span>
               </div>
             </>
           ) : (
-            <Link to="/login" className="nav-button login-button">
-              <i className="fas fa-sign-in-alt"></i>
-              <span>Iniciar Sesión</span>
-            </Link>
+            <>
+              <Link to="/login" className="nav-button login-button">
+                <i className="fas fa-sign-in-alt"></i>
+                <span>Iniciar Sesión</span>
+              </Link>
+              <Link to="/carrito" className="nav-button carrito-button">
+                <div className="carrito-icon">
+                  <i className="fas fa-shopping-cart"></i>
+                  {cartItemCount > 0 && <span className="carrito-contador">{cartItemCount}</span>}
+                </div>
+                <span>Carrito</span>
+              </Link>
+            </>
           )}
         </div>
 
@@ -71,10 +95,49 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Resto del código sin cambios */}
       {menuOpen && (
         <div className="mobile-menu">
-          {/* ... el contenido del menú móvil sigue igual ... */}
+          {isAuthenticated() ? (
+            <>
+              <Link to="/perfil" className="mobile-menu-item" onClick={() => setMenuOpen(false)}>
+                <i className="fas fa-user"></i> Mi Perfil
+              </Link>
+              <Link to="/historial" className="mobile-menu-item" onClick={() => setMenuOpen(false)}>
+                <i className="fas fa-history"></i> Mis Pedidos
+              </Link>
+              <Link to="/carrito" className="mobile-menu-item" onClick={() => setMenuOpen(false)}>
+                <i className="fas fa-shopping-cart"></i> Carrito {cartItemCount > 0 && `(${cartItemCount})`}
+              </Link>
+              <button onClick={handleLogout} className="mobile-menu-item logout-item">
+                <i className="fas fa-sign-out-alt"></i> Cerrar Sesión
+              </button>
+            </>
+          ) : isGuest() ? (
+            <>
+              <div className="mobile-menu-item guest-item">
+                <i className="fas fa-user-clock"></i> Modo Invitado
+              </div>
+              <Link to="/login" className="mobile-menu-item" onClick={() => setMenuOpen(false)}>
+                <i className="fas fa-sign-in-alt"></i> Iniciar Sesión
+              </Link>
+              <Link to="/carrito" className="mobile-menu-item" onClick={() => setMenuOpen(false)}>
+                <i className="fas fa-shopping-cart"></i> Carrito {cartItemCount > 0 && `(${cartItemCount})`}
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="mobile-menu-item" onClick={() => setMenuOpen(false)}>
+                <i className="fas fa-sign-in-alt"></i> Iniciar Sesión
+              </Link>
+              <Link to="/carrito" className="mobile-menu-item" onClick={() => setMenuOpen(false)}>
+                <i className="fas fa-shopping-cart"></i> Carrito {cartItemCount > 0 && `(${cartItemCount})`}
+              </Link>
+            </>
+          )}
+          <div className="mobile-search">
+            <input type="text" placeholder="Buscar productos..." />
+            <button><i className="fas fa-search"></i></button>
+          </div>
         </div>
       )}
     </header>

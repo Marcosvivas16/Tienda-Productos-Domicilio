@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "../styles/Login.css";
 
 const Login = () => {
@@ -8,6 +9,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, loginAsGuest } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,41 +17,17 @@ const Login = () => {
     setLoading(true);
     
     try {
-      // Aquí se conectaría con la API de backend
-      // Por ahora simulamos una respuesta exitosa después de 1 segundo
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Simular inicio de sesión exitoso
-      if (email === "usuario@ejemplo.com" && password === "123456") {
-        // Guardar info de usuario en localStorage (como simulación de sesión)
-        const userData = {
-          id: 1,
-          nombre: "Usuario Ejemplo",
-          email: email,
-          direccion: "Calle Ejemplo, 123",
-          isAuthenticated: true
-        };
-        
-        localStorage.setItem("usuario", JSON.stringify(userData));
-        navigate("/");
-      } else {
-        setError("Credenciales incorrectas. Intenta con usuario@ejemplo.com / 123456");
-      }
+      await login(email, password);
+      navigate("/");
     } catch (err) {
-      setError("Error al iniciar sesión. Inténtalo de nuevo.");
+      setError("Credenciales incorrectas. Intenta con usuario@ejemplo.com / 123456");
     } finally {
       setLoading(false);
     }
   };
 
   const handleGuestAccess = () => {
-    // Guardar info básica de invitado
-    const guestData = {
-      isGuest: true,
-      isAuthenticated: false
-    };
-    
-    localStorage.setItem("usuario", JSON.stringify(guestData));
+    loginAsGuest();
     navigate("/");
   };
 
