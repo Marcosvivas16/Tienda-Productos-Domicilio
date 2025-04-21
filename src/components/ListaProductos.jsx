@@ -1,8 +1,25 @@
 import React, { useState } from "react";
+import VistaRapida from "./VistaRapida";
 import "../styles/ListaProductos.css";
 
 const ListaProductos = ({ productos, agregarAlCarrito }) => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [modalProduct, setModalProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = (producto) => {
+    setModalProduct(producto);
+    setIsModalOpen(true);
+    // Evitar scroll en el body mientras el modal está abierto
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalProduct(null);
+    // Restaurar scroll en el body
+    document.body.style.overflow = "auto";
+  };
 
   return (
     <div className="productos-container">
@@ -42,7 +59,7 @@ const ListaProductos = ({ productos, agregarAlCarrito }) => {
                 <div className="producto-acciones">
                   <button 
                     className="btn-vista-rapida"
-                    onClick={() => console.log("Vista rápida:", producto)}
+                    onClick={() => openModal(producto)}
                   >
                     <i className="fas fa-eye"></i>
                   </button>
@@ -80,6 +97,16 @@ const ListaProductos = ({ productos, agregarAlCarrito }) => {
           </div>
         ))}
       </div>
+
+      {/* Modal de Vista Rápida */}
+      {isModalOpen && modalProduct && (
+        <VistaRapida
+          producto={modalProduct}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          agregarAlCarrito={agregarAlCarrito}
+        />
+      )}
     </div>
   );
 };
