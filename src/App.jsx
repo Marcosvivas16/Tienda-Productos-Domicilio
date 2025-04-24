@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Inicio from "./home/Inicio";
-import Productos from "./home/Productos";
+import Productos from "./pages/Productos";
 import Carrito from "./pages/Carrito";
 import Perfil from "./pages/Perfil";
 import Login from "./pages/Login";

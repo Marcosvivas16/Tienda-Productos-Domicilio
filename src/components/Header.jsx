@@ -7,6 +7,7 @@ import logoImage from "./img/logo.png";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const { currentUser, logout, isAuthenticated, isGuest } = useAuth();
   const { cartItems } = useCart();
   const navigate = useNavigate();
@@ -14,6 +15,18 @@ const Header = () => {
   const handleLogout = () => {
     logout();
     navigate("/");
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      // Navegar a la página de productos con el término de búsqueda como parámetro
+      navigate(`/productos?buscar=${encodeURIComponent(searchTerm.trim())}`);
+      // Cerrar el menú móvil si está abierto
+      setMenuOpen(false);
+      // Limpiar el campo de búsqueda
+      setSearchTerm("");
+    }
   };
 
   const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -25,12 +38,17 @@ const Header = () => {
           <img src={logoImage} alt="FastDelivery Logo" className="logo-img" />
         </Link>
 
-        <div className="search-bar">
-          <input type="text" placeholder="Buscar productos..." />
-          <button className="search-button">
+        <form onSubmit={handleSearch} className="search-bar">
+          <input 
+            type="text" 
+            placeholder="Buscar productos..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button type="submit" className="search-button">
             <i className="fas fa-search"></i>
           </button>
-        </div>
+        </form>
 
         <div className="nav-buttons">
           {isAuthenticated() ? (
@@ -134,10 +152,15 @@ const Header = () => {
               </Link>
             </>
           )}
-          <div className="mobile-search">
-            <input type="text" placeholder="Buscar productos..." />
-            <button><i className="fas fa-search"></i></button>
-          </div>
+          <form onSubmit={handleSearch} className="mobile-search">
+            <input 
+              type="text" 
+              placeholder="Buscar productos..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button type="submit"><i className="fas fa-search"></i></button>
+          </form>
         </div>
       )}
     </header>
