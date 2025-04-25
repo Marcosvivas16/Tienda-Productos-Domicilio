@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../styles/Perfil.css";
@@ -6,6 +6,8 @@ import "../styles/Perfil.css";
 const Perfil = () => {
   const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState("datos");
+  const [isLoading, setIsLoading] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
   
   // Datos temporales para el perfil
   const [formData, setFormData] = useState({
@@ -24,6 +26,16 @@ const Perfil = () => {
     newPassword: "",
     confirmPassword: ""
   });
+
+  // Limpiar el mensaje de éxito después de 3 segundos
+  useEffect(() => {
+    if (saveSuccess) {
+      const timer = setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [saveSuccess]);
   
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -43,8 +55,14 @@ const Perfil = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí se implementaría la llamada a la API para actualizar datos
-    alert("Datos guardados correctamente");
+    setIsLoading(true);
+    
+    // Simulamos una llamada a API
+    setTimeout(() => {
+      // Aquí iría la lógica para guardar en la base de datos
+      setIsLoading(false);
+      setSaveSuccess(true);
+    }, 800);
   };
   
   const handlePasswordSubmit = (e) => {
@@ -53,13 +71,20 @@ const Perfil = () => {
       alert("Las contraseñas no coinciden");
       return;
     }
-    // Aquí se implementaría la llamada a la API para cambiar contraseña
-    alert("Contraseña actualizada correctamente");
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: ""
-    });
+    
+    setIsLoading(true);
+    
+    // Simulamos una llamada a API
+    setTimeout(() => {
+      // Aquí iría la lógica para cambiar la contraseña en la base de datos
+      setIsLoading(false);
+      setSaveSuccess(true);
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+      });
+    }, 800);
   };
 
   return (
@@ -73,11 +98,11 @@ const Perfil = () => {
         <div className="perfil-sidebar">
           <div className="usuario-info">
             <div className="usuario-avatar">
-              <img src="https://via.placeholder.com/100" alt="Avatar" />
+              <img src={`https://ui-avatars.com/api/?name=${formData.nombre}+${formData.apellidos}&background=2196F3&color=fff&size=100`} alt="Avatar" />
             </div>
             <div className="usuario-detalles">
-              <h3>{currentUser?.nombre || "Usuario"}</h3>
-              <p>{currentUser?.email || "usuario@ejemplo.com"}</p>
+              <h3>{formData.nombre} {formData.apellidos}</h3>
+              <p>{formData.email}</p>
             </div>
           </div>
           
@@ -107,6 +132,12 @@ const Perfil = () => {
         </div>
         
         <div className="perfil-main">
+          {saveSuccess && (
+            <div className="save-success-message">
+              <i className="fas fa-check-circle"></i> Cambios guardados correctamente
+            </div>
+          )}
+          
           {activeTab === "datos" && (
             <div className="perfil-seccion">
               <h2>Datos Personales</h2>
@@ -120,6 +151,7 @@ const Perfil = () => {
                       name="nombre"
                       value={formData.nombre}
                       onChange={handleChange}
+                      className="form-input"
                     />
                   </div>
                   <div className="form-group">
@@ -130,6 +162,7 @@ const Perfil = () => {
                       name="apellidos"
                       value={formData.apellidos}
                       onChange={handleChange}
+                      className="form-input"
                     />
                   </div>
                 </div>
@@ -144,6 +177,7 @@ const Perfil = () => {
                       value={formData.email}
                       onChange={handleChange}
                       disabled
+                      className="form-input disabled"
                     />
                     <small>El email no se puede cambiar</small>
                   </div>
@@ -155,12 +189,51 @@ const Perfil = () => {
                       name="telefono"
                       value={formData.telefono}
                       onChange={handleChange}
+                      className="form-input"
                     />
                   </div>
                 </div>
                 
-                <div className="form-group">
-                  <label htmlFor="notificaciones">Notificaciones</label>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="direccion">Dirección</label>
+                    <input
+                      type="text"
+                      id="direccion"
+                      name="direccion"
+                      value={formData.direccion}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </div>
+                </div>
+                
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="ciudad">Ciudad</label>
+                    <input
+                      type="text"
+                      id="ciudad"
+                      name="ciudad"
+                      value={formData.ciudad}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="codigoPostal">Código Postal</label>
+                    <input
+                      type="text"
+                      id="codigoPostal"
+                      name="codigoPostal"
+                      value={formData.codigoPostal}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </div>
+                </div>
+                
+                <div className="form-group checkbox-group">
                   <div className="checkbox-container">
                     <input
                       type="checkbox"
@@ -176,8 +249,19 @@ const Perfil = () => {
                 </div>
                 
                 <div className="form-actions">
-                  <button type="submit" className="btn-guardar">
-                    Guardar cambios
+                  <button 
+                    type="submit" 
+                    className={`btn-guardar ${isLoading ? 'loading' : ''}`} 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <span className="spinner"></span>
+                        Guardando...
+                      </>
+                    ) : (
+                      'Guardar cambios'
+                    )}
                   </button>
                 </div>
               </form>
@@ -197,6 +281,7 @@ const Perfil = () => {
                     value={passwordData.currentPassword}
                     onChange={handlePasswordChange}
                     required
+                    className="form-input"
                   />
                 </div>
                 
@@ -209,6 +294,7 @@ const Perfil = () => {
                     value={passwordData.newPassword}
                     onChange={handlePasswordChange}
                     required
+                    className="form-input"
                   />
                 </div>
                 
@@ -221,12 +307,24 @@ const Perfil = () => {
                     value={passwordData.confirmPassword}
                     onChange={handlePasswordChange}
                     required
+                    className="form-input"
                   />
                 </div>
                 
                 <div className="form-actions">
-                  <button type="submit" className="btn-guardar">
-                    Actualizar contraseña
+                  <button 
+                    type="submit" 
+                    className={`btn-guardar ${isLoading ? 'loading' : ''}`} 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <span className="spinner"></span>
+                        Actualizando...
+                      </>
+                    ) : (
+                      'Actualizar contraseña'
+                    )}
                   </button>
                 </div>
               </form>
@@ -243,10 +341,10 @@ const Perfil = () => {
                     <span className="etiqueta-default">Predeterminada</span>
                   </div>
                   <div className="direccion-body">
-                    <p>{formData.nombre} {formData.apellidos}</p>
+                    <p><strong>{formData.nombre} {formData.apellidos}</strong></p>
                     <p>{formData.direccion}</p>
                     <p>{formData.ciudad}, {formData.codigoPostal}</p>
-                    <p>Tel: {formData.telefono}</p>
+                    <p><i className="fas fa-phone-alt"></i> {formData.telefono}</p>
                   </div>
                   <div className="direccion-actions">
                     <button className="btn-editar">
@@ -260,10 +358,10 @@ const Perfil = () => {
                     <h3>Dirección de trabajo</h3>
                   </div>
                   <div className="direccion-body">
-                    <p>{formData.nombre} {formData.apellidos}</p>
+                    <p><strong>{formData.nombre} {formData.apellidos}</strong></p>
                     <p>Avenida Trabajo 456</p>
                     <p>Ciudad Trabajo, 28002</p>
-                    <p>Tel: {formData.telefono}</p>
+                    <p><i className="fas fa-phone-alt"></i> {formData.telefono}</p>
                   </div>
                   <div className="direccion-actions">
                     <button className="btn-editar">
