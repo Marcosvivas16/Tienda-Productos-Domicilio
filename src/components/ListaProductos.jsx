@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import VistaRapida from "./VistaRapida";
 import "../styles/ListaProductos.css";
 
@@ -6,6 +6,7 @@ const ListaProductos = ({ productos, agregarAlCarrito }) => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [modalProduct, setModalProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ordenamiento, setOrdenamiento] = useState("relevancia");
 
   const openModal = (producto) => {
     setModalProduct(producto);
@@ -21,18 +22,38 @@ const ListaProductos = ({ productos, agregarAlCarrito }) => {
     document.body.style.overflow = "auto";
   };
 
+  // Ordenar productos según el criterio seleccionado
+  const productosOrdenados = useMemo(() => {
+    if (!productos || productos.length === 0) return [];
+    
+    const productosClonados = [...productos];
+    
+    switch (ordenamiento) {
+      case "precio-asc":
+        return productosClonados.sort((a, b) => a.precio - b.precio);
+      case "precio-desc":
+        return productosClonados.sort((a, b) => b.precio - a.precio);
+      case "nombre":
+        return productosClonados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      default: // relevancia, mantenemos el orden original
+        return productosClonados;
+    }
+  }, [productos, ordenamiento]);
+
+  const handleOrdenamientoChange = (e) => {
+    setOrdenamiento(e.target.value);
+  };
+
   return (
     <div className="productos-container">
       <div className="productos-header">
         <h2 className="productos-title">Nuestros Productos</h2>
         <div className="productos-filtros">
-          <select className="filtro-select">
-            <option value="todos">Todos los productos</option>
-            <option value="frutas">Frutas</option>
-            <option value="verduras">Verduras</option>
-            <option value="lacteos">Lácteos</option>
-          </select>
-          <select className="ordenar-select">
+          <select 
+            className="ordenar-select"
+            value={ordenamiento}
+            onChange={handleOrdenamientoChange}
+          >
             <option value="relevancia">Ordenar por relevancia</option>
             <option value="precio-asc">Precio: de menor a mayor</option>
             <option value="precio-desc">Precio: de mayor a menor</option>
@@ -42,7 +63,7 @@ const ListaProductos = ({ productos, agregarAlCarrito }) => {
       </div>
 
       <div className="productos-grid">
-        {productos.map((producto) => (
+        {productosOrdenados.map((producto) => (
           <div 
             key={producto.id} 
             className="producto-card"
