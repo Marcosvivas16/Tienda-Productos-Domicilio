@@ -1,6 +1,6 @@
 # Tienda Productos Domicilio 🛒
 
-Este es un proyecto base en React para nuestra tienda en línea de productos a domicilio.
+Plataforma de tienda en línea para la venta de productos a domicilio.
 
 ## 🚀 Requisitos Previos
 
@@ -11,7 +11,6 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 * Git
 * Un editor de código a elección de cada miembro
   
-
 ## 🔧 Instalación y Configuración
 
 ### Clonar el Repositorio
@@ -47,7 +46,7 @@ La aplicación estará disponible en: [http://localhost:3000](http://localhost:3
   
 ## ⏳ Planificación
 
-[Cronograma](/docs/cronograma.md)
+Puedes ver el cronograma del proyecto aquí: [Cronograma](/docs/cronograma.md)
 
 ## 👥 Roles
 | Nombre          | Rol                           | Responsabilidades principales                                      |
