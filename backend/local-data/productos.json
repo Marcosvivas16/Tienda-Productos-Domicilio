@@ -1,0 +1,52 @@
+[
+    {
+      "id": "0f24c493-212e-11f0-9e1d-00155dae7a67",
+      "nombre": "Manzanas Fuji",
+      "precio": 1.50,
+      "stock": 25,
+      "categoria_id": 1
+    },
+    {
+      "id": "0f24c938-212e-11f0-9e1d-00155dae7a67",
+      "nombre": "Leche Entera",
+      "precio": 0.99,
+      "stock": 100,
+      "categoria_id": 3
+    },
+    {
+      "id": "0f24c9fd-212e-11f0-9e1d-00155dae7a67",
+      "nombre": "Pan Integral",
+      "precio": 1.20,
+      "stock": 50,
+      "categoria_id": 4
+    },
+    {
+      "id": "0f24ca60-212e-11f0-9e1d-00155dae7a67",
+      "nombre": "Zanahorias",
+      "precio": 0.70,
+      "stock": 80,
+      "categoria_id": 2
+    },
+    {
+      "id": "0f24cab9-212e-11f0-9e1d-00155dae7a67",
+      "nombre": "Agua Mineral",
+      "precio": 0.50,
+      "stock": 200,
+      "categoria_id": 5
+    },
+    {
+      "id": "0f24cb21-212e-11f0-9e1d-00155dae7a67",
+      "nombre": "Pechuga de Pollo",
+      "precio": 4.50,
+      "stock": 40,
+      "categoria_id": 6
+    },
+    {
+      "id": "0f24cb6b-212e-11f0-9e1d-00155dae7a67",
+      "nombre": "Salmón",
+      "precio": 7.30,
+      "stock": 30,
+      "categoria_id": 7
+    }
+  ]
+  

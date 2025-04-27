@@ -1,0 +1,31 @@
+### Recuperar productos
+GET http://localhost:1234/productos
+
+### Recuperar un producto por ID
+GET http://localhost:1234/productos/14f67968-b2b6-4fff-8f7e-636a4c001ce0
+
+### Recuperar productos por categoría
+GET http://localhost:1234/productos?categoria=Frutas
+
+### Crear un producto
+POST http://localhost:1234/productos
+Content-Type: application/json
+
+{
+  "id": "11111111-1111-1111-1111-111111111111",
+  "nombre": "Ejemplo 3",
+  "precio": 1.1,
+  "stock": 60,
+  "categoria": "Verduras"
+}
+
+### Eliminar un producto
+DELETE http://localhost:1234/productos/14f67968-b2b6-4fff-8f7e-636a4c001ce0
+
+### Actualizar un producto
+PATCH  http://localhost:1234/productos/14f67968-b2b6-4fff-8f7e-636a4c001ce0
+Content-Type: application/json
+
+{
+  "precio": 0.5
+}
