@@ -14,16 +14,18 @@ Content-Type: application/json
 {
   "id": "11111111-1111-1111-1111-111111111111",
   "nombre": "Ejemplo 3",
+  "descripcion": "Descripción del producto",
   "precio": 1.1,
   "stock": 60,
+  "url_imagen": "https://example.com/imagen.jpg",
   "categoria": "Verduras"
 }
 
 ### Eliminar un producto
-DELETE http://localhost:1234/productos/14f67968-b2b6-4fff-8f7e-636a4c001ce0
+DELETE http://localhost:1234/productos/d93f4996-3a4a-42cf-b456-544c29d53888
 
 ### Actualizar un producto
-PATCH  http://localhost:1234/productos/14f67968-b2b6-4fff-8f7e-636a4c001ce0
+PATCH  http://localhost:1234/productos/d93f4996-3a4a-42cf-b456-544c29d53888
 Content-Type: application/json
 
 {
