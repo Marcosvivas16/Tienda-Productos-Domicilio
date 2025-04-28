@@ -1,141 +1,119 @@
-// Servicio simulado para la autenticación
+// Importamos todos los módulos al inicio
+import productosJSON from '../data/productos.json';
+
+// Servicio para la autenticación y datos
 
 // Usuarios de prueba
 const usuariosDemo = [
-    {
-      id: "user1",
-      nombre: "Usuario Demo",
-      email: "usuario@ejemplo.com",
-      password: "123456",
-      isAuthenticated: true
-    }
-  ];
-  
-  // Obtener datos de un usuario por ID
-  export const obtenerUsuario = async (userId) => {
-    // Simulamos una llamada a API
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const usuario = usuariosDemo.find(u => u.id === userId);
-        if (usuario) {
-          // No devolver la contraseña al cliente
-          const { password, ...userData } = usuario;
-          resolve(userData);
-        } else {
-          reject(new Error("Usuario no encontrado"));
-        }
-      }, 300);
-    });
-  };
-  
-  // Iniciar sesión
-  export const iniciarSesion = async (email, password) => {
-    // Simulamos una llamada a API de autenticación
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const usuario = usuariosDemo.find(
-          u => u.email === email && u.password === password
-        );
-        
-        if (usuario) {
-          // No devolver la contraseña al cliente
-          const { password, ...userData } = usuario;
-          resolve(userData);
-        } else {
-          reject(new Error("Credenciales incorrectas"));
-        }
-      }, 500);
-    });
-  };
-  
-  // Cerrar sesión
-  export const cerrarSesion = async () => {
-    // Simulamos una llamada a API para cerrar sesión
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ success: true });
-      }, 300);
-    });
-  };
-
-  // Datos de ejemplo para productos
-const productosData = [
   {
-    id: 1,
-    nombre: "Manzanas Rojas",
-    precio: 1.2,
-    precioAnterior: 1.5,
-    imagen: "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    descripcion: "Manzanas rojas frescas y jugosas, perfectas para comer directamente o usar en postres.",
-    oferta: true,
-    categoria: "frutas"
-  },
-  {
-    id: 2,
-    nombre: "Peras",
-    precio: 1.5,
-    imagen: "https://images.pexels.com/photos/568471/pexels-photo-568471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    descripcion: "Peras dulces y refrescantes, ricas en fibra y vitaminas.",
-    categoria: "frutas"
-  },
-  {
-    id: 3,
-    nombre: "Plátanos",
-    precio: 0.99,
-    imagen: "https://images.pexels.com/photos/1093038/pexels-photo-1093038.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    descripcion: "Plátanos amarillos en su punto perfecto de maduración, ideales para el desayuno o como snack.",
-    categoria: "frutas"
-  },
-  {
-    id: 4,
-    nombre: "Naranjas",
-    precio: 1.3,
-    imagen: "https://images.pexels.com/photos/42059/citrus-diet-fiber-fresh-42059.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    descripcion: "Naranjas jugosas y llenas de vitamina C, perfectas para hacer zumo natural.",
-    categoria: "frutas"
-  },
-  {
-    id: 5,
-    nombre: "Fresas",
-    precio: 2.5,
-    precioAnterior: 3.0,
-    imagen: "https://images.pexels.com/photos/46174/strawberries-berries-fruit-freshness-46174.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    descripcion: "Fresas frescas y dulces, recién cosechadas y listas para disfrutar.",
-    oferta: true,
-    categoria: "frutas"
-  },
-  {
-    id: 6,
-    nombre: "Lechuga",
-    precio: 0.8,
-    imagen: "https://images.pexels.com/photos/1199562/pexels-photo-1199562.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    descripcion: "Lechuga fresca y crujiente, perfecta para ensaladas saludables.",
-    categoria: "verduras"
-  },
-  {
-    id: 7,
-    nombre: "Tomates",
-    precio: 1.2,
-    imagen: "https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    descripcion: "Tomates rojos y jugosos, ideales para ensaladas o salsas caseras.",
-    categoria: "verduras"
-  },
-  {
-    id: 8,
-    nombre: "Zanahorias",
-    precio: 0.9,
-    imagen: "https://images.pexels.com/photos/143133/pexels-photo-143133.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    descripcion: "Zanahorias frescas y crujientes, llenas de vitaminas y sabor.",
-    categoria: "verduras"
+    id: "user1",
+    nombre: "Usuario Demo",
+    email: "usuario@ejemplo.com",
+    password: "123456",
+    isAuthenticated: true
   }
 ];
+
+// Obtener datos de un usuario por ID
+export const obtenerUsuario = async (userId) => {
+  // Simulamos una llamada a API
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const usuario = usuariosDemo.find(u => u.id === userId);
+      if (usuario) {
+        // No devolver la contraseña al cliente
+        const { password, ...userData } = usuario;
+        resolve(userData);
+      } else {
+        reject(new Error("Usuario no encontrado"));
+      }
+    }, 300);
+  });
+};
+
+// Iniciar sesión
+export const iniciarSesion = async (email, password) => {
+  // Simulamos una llamada a API de autenticación
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const usuario = usuariosDemo.find(
+        u => u.email === email && u.password === password
+      );
+      
+      if (usuario) {
+        // No devolver la contraseña al cliente
+        const { password, ...userData } = usuario;
+        resolve(userData);
+      } else {
+        reject(new Error("Credenciales incorrectas"));
+      }
+    }, 500);
+  });
+};
+
+// Cerrar sesión
+export const cerrarSesion = async () => {
+  // Simulamos una llamada a API para cerrar sesión
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ success: true });
+    }, 300);
+  });
+};
+
+// Mapa de categorías (para convertir entre ID y nombre)
+const categorias = {
+  1: "frutas",
+  2: "verduras",
+  3: "lácteos",
+  4: "panadería",
+  5: "bebidas",
+  6: "carne",
+  7: "pescado",
+  8: "congelados"
+};
+
+// Función para obtener el nombre de categoría a partir del ID
+export const obtenerNombreCategoria = (categoriaId) => {
+  return categorias[categoriaId] || "otros";
+};
+
+// Función para obtener el ID de categoría a partir del nombre
+export const obtenerIdCategoria = (categoriaNombre) => {
+  if (categoriaNombre === "todos") return 0;
+
+  for (const [id, nombre] of Object.entries(categorias)) {
+    if (nombre === categoriaNombre.toLowerCase()) {
+      return parseInt(id);
+    }
+  }
+  return 9; // Categoría "otros" por defecto
+};
+
+// Adaptador para convertir la estructura del JSON a la estructura esperada por el frontend
+const adaptarProductoParaFrontend = (producto) => {
+  return {
+    id: producto.id,
+    nombre: producto.nombre,
+    precio: producto.precio,
+    // Usar directamente la URL de imagen del JSON
+    imagen: producto.url_imagen || "https://via.placeholder.com/300",
+    descripcion: producto.descripcion,
+    // Convertir ID a nombre de categoría
+    categoria: obtenerNombreCategoria(producto.categoria_id),
+    categoria_id: producto.categoria_id,
+    stock: producto.stock
+  };
+};
 
 // Función para obtener todos los productos
 export const obtenerProductos = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(productosData);
-    }, 500); // Simula retraso de red
+      // Adaptar todos los productos
+      const productosAdaptados = productosJSON.map(adaptarProductoParaFrontend);
+      resolve(productosAdaptados);
+    }, 500);
   });
 };
 
@@ -143,10 +121,19 @@ export const obtenerProductos = () => {
 export const obtenerProductosPorCategoria = (categoria) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const productosFiltrados = categoria === "todos" 
-        ? productosData 
-        : productosData.filter(p => p.categoria === categoria);
-      resolve(productosFiltrados);
+      let productosFiltrados;
+      
+      if (categoria === "todos") {
+        productosFiltrados = productosJSON;
+      } else {
+        // Convertir el nombre de la categoría a ID para filtrar
+        const categoriaId = obtenerIdCategoria(categoria);
+        productosFiltrados = productosJSON.filter(p => p.categoria_id === categoriaId);
+      }
+      
+      // Adaptar los productos filtrados
+      const productosAdaptados = productosFiltrados.map(adaptarProductoParaFrontend);
+      resolve(productosAdaptados);
     }, 500);
   });
 };
@@ -155,12 +142,29 @@ export const obtenerProductosPorCategoria = (categoria) => {
 export const obtenerProductoPorId = (id) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const producto = productosData.find(p => p.id === parseInt(id));
+      const producto = productosJSON.find(p => p.id === id);
       if (producto) {
-        resolve(producto);
+        // Adaptar el producto
+        resolve(adaptarProductoParaFrontend(producto));
       } else {
         reject(new Error("Producto no encontrado"));
       }
     }, 500);
   });
+};
+
+// Función para buscar productos
+export const buscarProductos = async (terminoBusqueda) => {
+  try {
+    // Obtener todos los productos y filtrar
+    const productos = await obtenerProductos();
+    
+    return productos.filter(producto => 
+      producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      producto.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase())
+    );
+  } catch (error) {
+    console.error(`Error buscando productos con término "${terminoBusqueda}":`, error);
+    throw error;
+  }
 };

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "0f24c493-212e-11f0-9e1d-00155dae7a67",
+    "nombre": "Manzanas Fuji",
+    "descripcion": "Manzanas dulces, crujientes y de color rojo intenso.",
+    "precio": 1.50,
+    "stock": 25,
+    "url_imagen": "https://example.com/imagenes/manzanas_fuji.jpg",
+    "categoria_id": 1
+  },
+  {
+    "id": "0f24c938-212e-11f0-9e1d-00155dae7a67",
+    "nombre": "Leche Entera",
+    "descripcion": "Leche de vaca fresca, rica en calcio y vitaminas.",
+    "precio": 0.99,
+    "stock": 100,
+    "url_imagen": "https://example.com/imagenes/leche_entera.jpg",
+    "categoria_id": 3
+  },
+  {
+    "id": "0f24c9fd-212e-11f0-9e1d-00155dae7a67",
+    "nombre": "Pan Integral",
+    "descripcion": "Pan elaborado con harina integral, ideal para una dieta saludable.",
+    "precio": 1.20,
+    "stock": 50,
+    "url_imagen": "https://example.com/imagenes/pan_integral.jpg",
+    "categoria_id": 4
+  },
+  {
+    "id": "0f24ca60-212e-11f0-9e1d-00155dae7a67",
+    "nombre": "Zanahorias",
+    "descripcion": "Zanahorias frescas, ideales para ensaladas y sopas.",
+    "precio": 0.70,
+    "stock": 80,
+    "url_imagen": "https://example.com/imagenes/zanahorias.jpg",
+    "categoria_id": 2
+  },
+  {
+    "id": "0f24cab9-212e-11f0-9e1d-00155dae7a67",
+    "nombre": "Agua Mineral",
+    "descripcion": "Agua natural de manantial, embotellada en origen.",
+    "precio": 0.50,
+    "stock": 200,
+    "url_imagen": "https://example.com/imagenes/agua_mineral.jpg",
+    "categoria_id": 5
+  },
+  {
+    "id": "0f24cb21-212e-11f0-9e1d-00155dae7a67",
+    "nombre": "Pechuga de Pollo",
+    "descripcion": "Pechuga de pollo fresca, sin hormonas ni conservantes.",
+    "precio": 4.50,
+    "stock": 40,
+    "url_imagen": "https://example.com/imagenes/pechuga_pollo.jpg",
+    "categoria_id": 6
+  },
+  {
+    "id": "0f24cb6b-212e-11f0-9e1d-00155dae7a67",
+    "nombre": "Salmón",
+    "descripcion": "Filetes de salmón rosado, ricos en ácidos grasos Omega-3.",
+    "precio": 7.30,
+    "stock": 30,
+    "url_imagen": "https://example.com/imagenes/salmon.jpg",
+    "categoria_id": 7
+  }
+]
