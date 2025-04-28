@@ -6,7 +6,7 @@ import "../styles/Carrito.css";
 
 const Carrito = () => {
   const { isAuthenticated, isGuest } = useAuth();
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, getTotal } = useCart();
   const navigate = useNavigate();
 
   const formatPrice = (price) => {
@@ -75,15 +75,15 @@ const Carrito = () => {
             <h3 className="resumen-titulo">Resumen del pedido</h3>
             <div className="resumen-item">
               <span>Subtotal</span>
-              <span>${formatPrice(getCartTotal())}</span>
+              <span>${formatPrice(getTotal())}</span>
             </div>
             <div className="resumen-item">
               <span>Gastos de envío</span>
-              <span>{getCartTotal() > 20 ? "Gratis" : "$2.99"}</span>
+              <span>{getTotal() > 20 ? "Gratis" : "$2.99"}</span>
             </div>
             <div className="resumen-total">
               <span>Total</span>
-              <span>${formatPrice(getCartTotal() > 20 ? getCartTotal() : getCartTotal() + 2.99)}</span>
+              <span>${formatPrice(getTotal() > 20 ? getTotal() : getTotal() + 2.99)}</span>
             </div>
             
             <button 
