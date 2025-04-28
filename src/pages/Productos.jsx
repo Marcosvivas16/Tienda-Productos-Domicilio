@@ -32,28 +32,28 @@ const Productos = () => {
   }, []);
 
   // Filtra productos cuando cambia la categoría o el término de búsqueda
-  useEffect(() => {
-    if (productosOriginales.length > 0) {
-      let productosFiltrados = productosOriginales;
-      
-      // Filtrar por categoría
-      if (categoriaActiva !== "todos") {
-        productosFiltrados = productosFiltrados.filter(
-          p => p.categoria === categoriaActiva
-        );
-      }
-      
-      // Filtrar por término de búsqueda
-      if (terminoBusqueda) {
-        productosFiltrados = productosFiltrados.filter(
-          p => p.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
-             (p.descripcion && p.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase()))
-        );
-      }
-      
-      setProductos(productosFiltrados);
+useEffect(() => {
+  if (productosOriginales.length > 0) {
+    let productosFiltrados = productosOriginales;
+    
+    // Filtrar por categoría
+    if (categoriaActiva !== "todos") {
+      productosFiltrados = productosFiltrados.filter(
+        p => p.categoria.toLowerCase() === categoriaActiva.toLowerCase()
+      );
     }
-  }, [categoriaActiva, terminoBusqueda, productosOriginales]);
+    
+    // Filtrar por término de búsqueda
+    if (terminoBusqueda) {
+      productosFiltrados = productosFiltrados.filter(
+        p => p.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+           (p.descripcion && p.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase()))
+      );
+    }
+    
+    setProductos(productosFiltrados);
+  }
+}, [categoriaActiva, terminoBusqueda, productosOriginales]);
 
   const agregarAlCarrito = (producto) => {
     addToCart(producto);
@@ -103,6 +103,36 @@ const Productos = () => {
           onClick={() => cambiarCategoria("lacteos")}
         >
           Lácteos
+        </button>
+        <button 
+          className={`filtro-btn ${categoriaActiva === "panaderia" ? "active" : ""}`}
+          onClick={() => cambiarCategoria("panaderia")}
+        >
+          Panadería
+        </button>
+        <button 
+          className={`filtro-btn ${categoriaActiva === "bebidas" ? "active" : ""}`}
+          onClick={() => cambiarCategoria("bebidas")}
+        >
+          Bebidas
+        </button>
+        <button 
+          className={`filtro-btn ${categoriaActiva === "carne" ? "active" : ""}`}
+          onClick={() => cambiarCategoria("carne")}
+        >
+          Carne
+        </button>
+        <button 
+          className={`filtro-btn ${categoriaActiva === "pescado" ? "active" : ""}`}
+          onClick={() => cambiarCategoria("pescado")}
+        >
+          Pescado
+        </button>
+        <button 
+          className={`filtro-btn ${categoriaActiva === "congelados" ? "active" : ""}`}
+          onClick={() => cambiarCategoria("congelados")}
+        >
+          Congelados
         </button>
       </div>
       
