@@ -9,10 +9,17 @@ const Productos = () => {
   const [productos, setProductos] = useState([]);
   const [productosOriginales, setProductosOriginales] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [categoriaActiva, setCategoriaActiva] = useState("todos");
   const [searchParams] = useSearchParams();
   const terminoBusqueda = searchParams.get("buscar") || "";
+  const categoriaParam = searchParams.get("categoria") || "todos";
+  const [categoriaActiva, setCategoriaActiva] = useState(categoriaParam);
   const { addToCart } = useCart();
+
+  // Detectar cambios en los parámetros de URL
+  useEffect(() => {
+    const nuevaCategoria = searchParams.get("categoria") || "todos";
+    setCategoriaActiva(nuevaCategoria);
+  }, [searchParams]);
 
   useEffect(() => {
     const cargarProductos = async () => {
@@ -31,29 +38,37 @@ const Productos = () => {
     cargarProductos();
   }, []);
 
+  // Función para normalizar textos (eliminar tildes)
+  const normalizarTexto = (texto) => {
+    return texto
+      .toLowerCase()
+      .normalize("NFD") 
+      .replace(/[\u0300-\u036f]/g, "");
+  };
+
   // Filtra productos cuando cambia la categoría o el término de búsqueda
-useEffect(() => {
-  if (productosOriginales.length > 0) {
-    let productosFiltrados = productosOriginales;
-    
-    // Filtrar por categoría
-    if (categoriaActiva !== "todos") {
-      productosFiltrados = productosFiltrados.filter(
-        p => p.categoria.toLowerCase() === categoriaActiva.toLowerCase()
-      );
+  useEffect(() => {
+    if (productosOriginales.length > 0) {
+      let productosFiltrados = productosOriginales;
+      
+      // Filtrar por categoría usando normalización
+      if (categoriaActiva !== "todos") {
+        productosFiltrados = productosFiltrados.filter(
+          p => normalizarTexto(p.categoria) === normalizarTexto(categoriaActiva)
+        );
+      }
+      
+      // Filtrar por término de búsqueda
+      if (terminoBusqueda) {
+        productosFiltrados = productosFiltrados.filter(
+          p => p.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+             (p.descripcion && p.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase()))
+        );
+      }
+      
+      setProductos(productosFiltrados);
     }
-    
-    // Filtrar por término de búsqueda
-    if (terminoBusqueda) {
-      productosFiltrados = productosFiltrados.filter(
-        p => p.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
-           (p.descripcion && p.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase()))
-      );
-    }
-    
-    setProductos(productosFiltrados);
-  }
-}, [categoriaActiva, terminoBusqueda, productosOriginales]);
+  }, [categoriaActiva, terminoBusqueda, productosOriginales]);
 
   const agregarAlCarrito = (producto) => {
     addToCart(producto);
