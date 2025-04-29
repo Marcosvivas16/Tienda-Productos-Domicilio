@@ -1,5 +1,5 @@
-//import { ProductoModel } from "../models/local-file-system/producto.js";
-import { ProductoModel } from '../models/database/producto.js'
+import { ProductoModel } from "../models/local-file-system/producto.js";
+//import { ProductoModel } from '../models/database/producto.js'
 import { validateProducto, validatePartialProducto } from '../schemes/productos.js'
 
 export class ProductoController {
