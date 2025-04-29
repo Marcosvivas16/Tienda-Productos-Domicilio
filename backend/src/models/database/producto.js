@@ -8,7 +8,10 @@ const config = {
 	user: process.env.DB_USER,
 	port: process.env.DB_PORT,
 	password: process.env.DB_PASSWORD,
-	database: process.env.DB_DATABASE
+	database: process.env.DB_DATABASE, 
+	waitForConnections: true,
+	connectionLimit: 10,
+	queueLimit: 0
 };
 
 const connection = await mysql.createConnection(config)
@@ -28,7 +31,7 @@ export class ProductoModel {
 			const [{id}] = categorias
 
 			const [productos] = await connection.query(
-				`SELECT BIN_TO_UUID(id) AS id, nombre, precio, stock
+				`SELECT BIN_TO_UUID(id) AS id, nombre, descripcion, precio, stock, url_imagen, categoria_id
 				FROM producto
 				WHERE categoria_id = ?;`,
 				[id]
@@ -38,7 +41,7 @@ export class ProductoModel {
 		}
 
 		const [productos] = await connection.query(
-				'SELECT BIN_TO_UUID(id) AS id, nombre, precio, stock, categoria_id FROM producto;'
+				'SELECT BIN_TO_UUID(id) AS id, nombre, descripcion, precio, stock, url_imagen, categoria_id FROM producto;'
 		)
 
 		return productos
@@ -46,7 +49,7 @@ export class ProductoModel {
     
 	static async getById ({ id }) {
 		const [productos] = await connection.query(
-			`SELECT nombre, precio, stock, BIN_TO_UUID(id) id
+			`SELECT nombre, descripcion, precio, stock, url_imagen, BIN_TO_UUID(id) id
 				FROM producto WHERE id = UUID_TO_BIN(?);`,
 			[id]
 		)
@@ -57,7 +60,7 @@ export class ProductoModel {
 	}
     
 	static async create ({ input }) {
-		const { nombre, precio, stock, categoria } = input
+		const { nombre, descripcion, precio, stock, url_imagen,categoria } = input
 
 		const [categorias] = await connection.query(
 			'SELECT id FROM categoria WHERE LOWER(nombre) = ?;',
@@ -75,16 +78,16 @@ export class ProductoModel {
 
 		try {
 			await connection.query(
-			`INSERT INTO producto (id, nombre, precio, stock, categoria_id)
-				VALUES (UUID_TO_BIN(?), ?, ?, ?, ?);`,
-			  [uuid, nombre, precio, stock, categoria_id]
+			`INSERT INTO producto (id, nombre, descripcion, precio, stock, url_imagen, categoria_id)
+				VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?);`,
+			  [uuid, nombre, descripcion, precio, stock, url_imagen, categoria_id]
     		)
     	} catch (e) {
       		throw new Error('Error creando el producto')
     	}
 
 		const [productos] = await connection.query(
-		`SELECT nombre, precio, stock, categoria_id, BIN_TO_UUID(id) id
+		`SELECT nombre, descripcion, precio, stock, url_imagen, categoria_id, BIN_TO_UUID(id) id
 			FROM producto WHERE id = UUID_TO_BIN(?);`,
 		  [uuid]
     	)
