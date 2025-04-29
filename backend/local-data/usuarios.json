@@ -1,0 +1,23 @@
+[
+    {
+      "id": "1a2b3c4d",
+      "email": "juanperez@example.com",
+      "password": "123456"
+    },
+    {
+      "id": "5e6f7g8h",
+      "email": "mariagomez@example.com",
+      "password": "abcdef"
+    },
+    {
+      "id": "9i0j1k2l",
+      "email": "carloslopez@example.com",
+      "password": "qwerty"
+    },
+    {
+      "id": "3m4n5o6p",
+      "email": "lauradiaz@example.com",
+      "password": "contraseña123"
+    }
+  ]
+  

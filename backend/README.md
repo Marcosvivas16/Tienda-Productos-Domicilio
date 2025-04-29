@@ -1,21 +1,29 @@
 # README.md - API de Productos
 
 ## Descripción
-La API de productos. Funciona actualmente con archivos JSON locales. Se añadirá pronto la conexión con MySQL.
+Esta API permite gestionar productos y usuarios de una tienda de productos a domicilio.
+Actualmente los datos se manejan en archivos JSON locales.
+En el futuro se añadirá conexión a MySQL.
 
 ## Instalación
 
 ```bash
-çcd backend
+cd backend
 npm install
 node --watch src/server.js
 ```
 
 El servidor estará disponible en `http://localhost:1234`.
 
-## Datos
-* Archivos en `local-data/` (productos.json y categorias.json)
-* Los cambios solo se guardan en memoria
+## Estructura de datos
+
+- **Productos**:
+        Archivos en `local-data/productos.json` y `local-data/categorias.json`
+    
+- **Usuarios**:
+    Archivo en `local-data/usuarios.json`    
+
+Nota: Los cambios (crear, actualizar, eliminar) se guardan solo en memoria, no se escriben de vuelta a los archivos.
 
 ## Testing con api.http
 1. Instalar extensión **REST Client** en VS Code
@@ -23,6 +31,23 @@ El servidor estará disponible en `http://localhost:1234`.
 3. Verás distintas peticiones (GET, POST, PUT, DELETE).
 4. Hacer clic en "Send Request" para probar endpoints directamente
 
-## Notas
-* Los productos usan `categoria_id` relacionado con la lista de categorías
-* Al crear productos o hacer cambios, debemos pasar la categoría como string. El sistema encuentra el ID automáticamente
+## Funcionalidades actuales
+
+### Productos
+
+- Obtener todos los productos.
+- Obtener un producto por ID.
+- Filtrar productos por categoría.
+- Crear un producto.
+- Actualizar un producto.
+- Eliminar un producto.
+
+Los productos utilizan categoria_id asociado a la lista de categorías. Para crear productos, se pasa la categoría como string y el sistema encuentra el ID correspondiente.
+
+### Usuarios
+
+- Obtener todos los usuarios (`GET /usuarios`)
+- Registrar un nuevo usuario (`POST /usuarios/register`)
+- Login de usuario (`POST /usuarios/login`)
+
+Cada usuario tiene: email y contraseña.

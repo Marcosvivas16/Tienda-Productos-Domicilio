@@ -1,3 +1,5 @@
+# PRODUCTOS
+
 ### Recuperar productos
 GET http://localhost:1234/productos
 
@@ -30,4 +32,27 @@ Content-Type: application/json
 
 {
   "precio": 0.5
+}
+
+# USUARIOS
+
+### Recuperar todos los usuarios
+GET http://localhost:1234/usuarios
+
+### Registrar un nuevo usuario
+POST http://localhost:1234/usuarios/register
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com",
+  "password": "12345678"
+}
+
+### Hacer login
+POST http://localhost:1234/usuarios/login
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com",
+  "password": "12345678"
 }
