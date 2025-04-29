@@ -1,5 +1,6 @@
 // Importamos todos los módulos al inicio
 import productosJSON from '../data/productos.json';
+const API_BASE_URL = "http://localhost:1234";
 
 // Servicio para la autenticación y datos
 
@@ -107,35 +108,34 @@ const adaptarProductoParaFrontend = (producto) => {
 };
 
 // Función para obtener todos los productos
-export const obtenerProductos = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      // Adaptar todos los productos
-      const productosAdaptados = productosJSON.map(adaptarProductoParaFrontend);
-      resolve(productosAdaptados);
-    }, 500);
-  });
+export const obtenerProductos = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/productos`);
+    if (!response.ok) {
+      throw new Error("Error al obtener productos");
+    }
+    const productos = await response.json();
+    return productos;
+  } catch (error) {
+    console.error("Error al cargar productos desde la API:", error);
+    throw error;
+  }
 };
 
-// Función para obtener productos por categoría
-export const obtenerProductosPorCategoria = (categoria) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      let productosFiltrados;
-      
-      if (categoria === "todos") {
-        productosFiltrados = productosJSON;
-      } else {
-        // Convertir el nombre de la categoría a ID para filtrar
-        const categoriaId = obtenerIdCategoria(categoria);
-        productosFiltrados = productosJSON.filter(p => p.categoria_id === categoriaId);
-      }
-      
-      // Adaptar los productos filtrados
-      const productosAdaptados = productosFiltrados.map(adaptarProductoParaFrontend);
-      resolve(productosAdaptados);
-    }, 500);
-  });
+export const obtenerProductosPorCategoria = async (categoria) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/productos?categoria=${encodeURIComponent(categoria)}`);
+    if (!response.ok) {
+      throw new Error("Error al obtener productos por categoría");
+    }
+    const productos = await response.json();
+    
+    const productosAdaptados = productos.map(adaptarProductoParaFrontend);
+    return productosAdaptados;
+  } catch (error) {
+    console.error("Error al cargar productos desde la API:", error);
+    throw error;
+  }
 };
 
 // Función para obtener un producto específico por ID
