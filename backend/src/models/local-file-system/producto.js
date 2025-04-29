@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { readJSON } from '../../utils.js'
+import { readJSON, writeJSON } from '../../utils.js' // Se agrega writeJSON
 
 const productos = await readJSON('../local-data/productos.json')
 const categorias = await readJSON('../local-data/categorias.json')
@@ -44,11 +44,11 @@ export class ProductoModel {
 		}
 	
 		productos.push(nuevoProducto)
+		await writeJSON('local-data/productos.json', productos) // Actualiza el archivo JSON
 	
 		return nuevoProducto
 	}
 	
-    
 	static async delete ({ id }) {
 		const indiceProducto = productos.findIndex(producto => producto.id === id)
 
@@ -57,6 +57,7 @@ export class ProductoModel {
 		}
 
 		productos.splice(indiceProducto, 1)
+		await writeJSON('local-data/productos.json', productos) // Actualiza el archivo JSON
 
 		return true        
 	}
@@ -71,6 +72,8 @@ export class ProductoModel {
 			...productos[indiceProducto],
 			...input
 		}
+		await writeJSON('local-data/productos.json', productos) // Actualiza el archivo JSON
+		
 		return productos[indiceProducto]
 	}
 }
