@@ -23,8 +23,6 @@ El servidor estará disponible en `http://localhost:1234`.
 - **Usuarios**:
     Archivo en `local-data/usuarios.json`    
 
-Nota: Los cambios (crear, actualizar, eliminar) se guardan solo en memoria, no se escriben de vuelta a los archivos.
-
 ## Testing con api.http
 1. Instalar extensión **REST Client** en VS Code
 2. Abrir archivo `api.http`
@@ -35,12 +33,12 @@ Nota: Los cambios (crear, actualizar, eliminar) se guardan solo en memoria, no s
 
 ### Productos
 
-- Obtener todos los productos.
-- Obtener un producto por ID.
-- Filtrar productos por categoría.
-- Crear un producto.
-- Actualizar un producto.
-- Eliminar un producto.
+- Obtener todos los productos (`GET /productos`)
+- Obtener un producto por ID (`GET /productos/:id`)
+- Filtrar productos por categoría (`GET /productos?categoria=nombre_categoria`)
+- Crear un producto (`POST /productos`)
+- Actualizar un producto (`PUT /productos/:id`)
+- Eliminar un producto (`DELETE /productos/:id`)
 
 Los productos utilizan categoria_id asociado a la lista de categorías. Para crear productos, se pasa la categoría como string y el sistema encuentra el ID correspondiente.
 
@@ -49,5 +47,14 @@ Los productos utilizan categoria_id asociado a la lista de categorías. Para cre
 - Obtener todos los usuarios (`GET /usuarios`)
 - Registrar un nuevo usuario (`POST /usuarios/register`)
 - Login de usuario (`POST /usuarios/login`)
+- Logout de usuario (`POST /usuarios/logout`)
+- Acceso a un endpoint protegido (`GET /usuarios/protected`)
 
 Cada usuario tiene: email y contraseña.
+
+## Autenticación
+La API utiliza autenticación basada en JWT (JSON Web Tokens). Aquí tienes un resumen de cómo funciona:
+
+- **Login (`POST /usuarios/login`)**: Devuelve un token JWT que se almacena en una cookie llamada `access_token`.
+- **Logout (`POST /usuarios/logout`)**: Elimina la cookie `access_token` para cerrar la sesión.
+- **Endpoints protegidos**: Los endpoints protegidos requieren que el cliente envíe la cookie `access_token` en cada solicitud.
