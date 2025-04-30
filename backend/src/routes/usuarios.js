@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { UsuarioController } from "../controllers/usuarios.js";
+import { authenticateJWT } from "../middlewares/auth.js";
+
 
 export const usuariosRouter = Router();
 
@@ -11,5 +13,4 @@ usuariosRouter.post("/register", UsuarioController.register)
 
 usuariosRouter.post("/logout", UsuarioController.logout)
 
-// considerar cambiar nombre a /me o /profile
-usuariosRouter.get("/protected", UsuarioController.protected) 
+usuariosRouter.get("/protected", authenticateJWT, UsuarioController.protected) 
