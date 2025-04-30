@@ -115,10 +115,15 @@ export const obtenerProductos = async () => {
       throw new Error("Error al obtener productos");
     }
     const productos = await response.json();
-    return productos;
+    
+    // Adaptar los productos antes de devolverlos, igual que en obtenerProductosPorCategoria
+    const productosAdaptados = productos.map(adaptarProductoParaFrontend);
+    return productosAdaptados;
   } catch (error) {
     console.error("Error al cargar productos desde la API:", error);
-    throw error;
+    
+    // Si falla, devolver los productos del JSON local ya adaptados
+    return productosJSON.map(adaptarProductoParaFrontend);
   }
 };
 
