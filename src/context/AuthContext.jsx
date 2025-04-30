@@ -36,6 +36,50 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+
+  const register = async (nombre, email, password) => {
+    try {
+      // Llamada a la API para registrar al usuario
+      const response = await fetch('http://localhost:1234/usuarios/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre,
+          email,
+          password
+        })
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al registrar usuario');
+      }
+  
+      const data = await response.json();
+      
+      // Crear el objeto de usuario con la propiedad isAuthenticated
+      const userData = {
+        ...data.user,
+        isAuthenticated: true,  // Añadir esta propiedad para mantener coherencia
+        isGuest: false          // Indicar explícitamente que no es un invitado
+      };
+      
+      // Guardar token y usuario en localStorage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('usuario', JSON.stringify(userData)); // Usar 'usuario' como en login()
+      
+      // Actualizar el estado
+      setCurrentUser(userData);
+      
+      return data;
+    } catch (error) {
+      console.error('Error en registro:', error);
+      throw error;
+    }
+  };
+
   const loginAsGuest = () => {
     const guestData = {
       id: "guest-" + Date.now(),
@@ -69,7 +113,8 @@ export const AuthProvider = ({ children }) => {
     loginAsGuest,
     logout,
     isGuest,
-    isAuthenticated
+    isAuthenticated,
+    register
   };
 
   return (

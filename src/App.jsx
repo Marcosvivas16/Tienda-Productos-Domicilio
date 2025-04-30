@@ -6,6 +6,7 @@ import Productos from "./pages/Productos";
 import Carrito from "./pages/Carrito";
 import Perfil from "./pages/Perfil";
 import Login from "./pages/Login";
+import Registro from "./pages/Registro";
 import Historial from "./pages/Historial";
 import DetalleProducto from "./pages/DetalleProducto";
 import Checkout from "./pages/Checkout";
@@ -55,6 +56,8 @@ function App() {
                     </ProtectedRoute>
                   } 
                 />
+                <Route path="/login" element={<Login />} />
+                <Route path="/registro" element={<Registro />} />
               </Routes>
             </main>
           </div>
