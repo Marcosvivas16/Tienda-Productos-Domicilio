@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { readJSON } from '../../utils.js'
+import { readJSON, writeJSON } from '../../utils.js'
 import bcrypt from 'bcryptjs'
 
 const usuarios = await readJSON('../local-data/usuarios.json')
@@ -29,6 +29,7 @@ export class UsuarioModel {
     }
 
     usuarios.push(nuevoUsuario)
+    await writeJSON('local-data/usuarios.json', usuarios) 
 
     return {
       id: nuevoUsuario.id,

@@ -1,23 +1,32 @@
 [
-    {
-      "id": "1a2b3c4d",
-      "email": "juanperez@example.com",
-      "password": "123456"
-    },
-    {
-      "id": "5e6f7g8h",
-      "email": "mariagomez@example.com",
-      "password": "abcdef"
-    },
-    {
-      "id": "9i0j1k2l",
-      "email": "carloslopez@example.com",
-      "password": "qwerty"
-    },
-    {
-      "id": "3m4n5o6p",
-      "email": "lauradiaz@example.com",
-      "password": "contraseña123"
-    }
-  ]
-  
+  {
+    "id": "1a2b3c4d",
+    "email": "juanperez@example.com",
+    "password": "123456"
+  },
+  {
+    "id": "5e6f7g8h",
+    "email": "mariagomez@example.com",
+    "password": "abcdef"
+  },
+  {
+    "id": "9i0j1k2l",
+    "email": "carloslopez@example.com",
+    "password": "qwerty"
+  },
+  {
+    "id": "3m4n5o6p",
+    "email": "lauradiaz@example.com",
+    "password": "contraseña123"
+  },
+  {
+    "id": "b00448ea-7a5d-4b07-9e01-5c2dc4a4b47b",
+    "email": "emiliafrances@example.com",
+    "password": "$2b$10$miM126M/CAg5hJ75G9Kck.zvGni0Va7PQbxZHaZEBSGpMvr1XaNXa"
+  },
+  {
+    "id": "08d28941-dafc-4b55-ac04-6c0c6a69551e",
+    "email": "juancarlos@example.com",
+    "password": "$2b$10$FWpdBupLuVyFdMFcfVO8COETmBww1ji5fLEXrBsopUaYy2aMHPFBu"
+  }
+]
