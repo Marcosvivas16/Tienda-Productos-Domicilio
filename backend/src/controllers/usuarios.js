@@ -1,5 +1,3 @@
-import { UsuarioModel } from "../models/local-file-system/usuario.js";
-//import { UsuarioModel } from '../models/database/usuario.js'
 import { validateUsuario } from '../schemes/usuarios.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
@@ -7,12 +5,16 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export class UsuarioController {
-  static async getAll (req, res) {
-    const usuarios = await UsuarioModel.getAll()
+  constructor ({ usuarioModel }) {
+    this.usuarioModel = usuarioModel
+  }
+
+  getAll = async (req, res) => {
+    const usuarios = await this.usuarioModel.getAll()
     res.json(usuarios)
   }
 
-  static async register (req, res) {
+  register = async (req, res) => {
     const result = validateUsuario(req.body)
 
     if (!result.success) {
@@ -20,14 +22,14 @@ export class UsuarioController {
     }
 
     try {
-      const nuevoUsuario = await UsuarioModel.register({ input: result.data })
-      res.send({ id: nuevoUsuario.id })
+      const nuevoUsuario = await this.usuarioModel.register({ input: result.data })
+      res.send({ id: nuevoUsuario.id, email: nuevoUsuario.email })
     } catch (error) {
       res.status(400).json({ error: error.message })
     }
   }
 
-  static async login (req, res) {
+  login = async (req, res) => {
     const result = validateUsuario(req.body)
 
     if (!result.success) {
@@ -35,7 +37,7 @@ export class UsuarioController {
     }
 
     try {
-      const usuario = await UsuarioModel.login({ input: result.data })
+      const usuario = await this.usuarioModel.login({ input: result.data })
       const token = jwt.sign(
         { user: usuario },
         process.env.JWT_SECRET,
@@ -54,9 +56,8 @@ export class UsuarioController {
     }
   }
 
-  static async logout (req, res) {
+  logout = async (req, res) => {
     try {
-      await UsuarioModel.logout()
       res
         .clearCookie("access_token")
         .status(200)
@@ -66,7 +67,7 @@ export class UsuarioController {
     }
   }
 
-  static async protected (req, res) {
+  protected = async (req, res) => {
     const { user } = req
 
     if (!user) {
@@ -74,7 +75,7 @@ export class UsuarioController {
     }
 
     try {
-      const usuarioProtegido = await UsuarioModel.protected({ id: user.id })
+      const usuarioProtegido = await this.usuarioModel.protected({ id: user.id })
 
       if (!usuarioProtegido) {
         return res.status(404).json({ message: "Usuario no encontrado" })

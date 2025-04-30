@@ -2,15 +2,20 @@ import { Router } from "express";
 import { UsuarioController } from "../controllers/usuarios.js";
 import { authenticateJWT } from "../middlewares/auth.js";
 
+export const createUsuarioRouter = ({ usuarioModel }) => {
+    const usuariosRouter = Router();
 
-export const usuariosRouter = Router();
+    const usuarioController = new UsuarioController({ usuarioModel });
 
-usuariosRouter.get("/", UsuarioController.getAll)
+    usuariosRouter.get("/", usuarioController.getAll)
 
-usuariosRouter.post("/login", UsuarioController.login)
+    usuariosRouter.post("/login", usuarioController.login)
 
-usuariosRouter.post("/register", UsuarioController.register)
+    usuariosRouter.post("/register", usuarioController.register)
 
-usuariosRouter.post("/logout", UsuarioController.logout)
+    usuariosRouter.post("/logout", usuarioController.logout)
 
-usuariosRouter.get("/protected", authenticateJWT, UsuarioController.protected) 
+    usuariosRouter.get("/protected", authenticateJWT, usuarioController.protected) 
+
+    return usuariosRouter;
+}
