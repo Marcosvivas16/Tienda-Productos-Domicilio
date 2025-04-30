@@ -1,14 +1,20 @@
 import { Router } from "express";
 import { ProductoController } from "../controllers/productos.js";
 
-export const productosRouter = Router();
+export const createProductoRouter = ({ productoModel }) => {
+    const productosRouter = Router();
 
-productosRouter.get("/", ProductoController.getAll)
+    const productoController = new ProductoController({ productoModel });
 
-productosRouter.get("/:id", ProductoController.getById)
+    productosRouter.get("/", productoController.getAll)
 
-productosRouter.post("/", ProductoController.create)
+    productosRouter.get("/:id", productoController.getById)
 
-productosRouter.delete("/:id", ProductoController.delete)
+    productosRouter.post("/", productoController.create)
 
-productosRouter.patch("/:id", ProductoController.update)
+    productosRouter.delete("/:id", productoController.delete)
+
+    productosRouter.patch("/:id", productoController.update)
+
+    return productosRouter;
+}

@@ -1,17 +1,19 @@
 import express, { json } from 'express'
 import cookieParser from 'cookie-parser'
-import { productosRouter } from './routes/productos.js'
+import { createProductoRouter } from './routes/productos.js'
 import { usuariosRouter } from './routes/usuarios.js'
 import { corsMiddleware } from './middlewares/cors.js'
 
-const app = express()
+export const createApp = ({ productoModel }) => {
+  const app = express()
 
-app.use(json())
-app.use(corsMiddleware())
-app.use(cookieParser())
-app.disable('x-powered-by') 
+  app.use(json())
+  app.use(corsMiddleware())
+  app.use(cookieParser())
+  app.disable('x-powered-by') 
 
-app.use('/productos', productosRouter)
-app.use('/usuarios', usuariosRouter)
+  app.use('/productos', createProductoRouter({ productoModel}))
+  app.use('/usuarios', usuariosRouter)
 
-export default app 
+  return app
+}

@@ -6,14 +6,29 @@ Actualmente los datos se manejan en archivos JSON locales.
 En el futuro se añadirá conexión a MySQL.
 
 ## Instalación
+1. Navega al directorio del backend:
+   ```bash
+   cd backend
+   ```
 
-```bash
-cd backend
-npm install
-node --watch src/server.js
-```
+2. Instala las dependencias necesarias:
+   ```bash
+   npm install
+   ```
 
-El servidor estará disponible en `http://localhost:1234`.
+3. Inicia el servidor **usando una de las siguientes opciones**:
+
+   - Para iniciar con la base de datos:
+     ```bash
+     npm run start:db
+     ```
+
+   - Para iniciar en modo local:
+     ```bash
+     npm run start:local
+     ```
+
+El servidor estará disponible en **[http://localhost:1234](http://localhost:1234)**.
 
 ## Estructura de datos
 

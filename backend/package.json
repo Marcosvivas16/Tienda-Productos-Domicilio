@@ -4,7 +4,8 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "start": "node src/server.js",
+    "start:local": "node --watch src/server-with-local.js",
+    "start:db": "node --watch src/server-with-db.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
