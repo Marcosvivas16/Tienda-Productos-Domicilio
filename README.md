@@ -52,7 +52,7 @@ Puedes ver el cronograma del proyecto aquí: [Cronograma](/docs/cronograma.md)
 | Nombre          | Rol                           | Responsabilidades principales                                      |
 |-----------------|-------------------------------|--------------------------------------------------------------------|
 | Hatim Bajji     | Documentación y organización  | Coordinación general, planificación (Gantt), frontend, UI/UX, documentación|
-| Marcos Vivas    | Responsable de Frontend       | UI/UX, maquetación en React, diseño de prototipos                  |
+| Marcos Vivas    | Responsable de Frontend       | UI/UX, frontend, maquetación en React, diseño de prototipos                  |
 | Diego Vallespín | Responsable de Backend        | API REST, conexión con base de datos, lógica de negocio            |
 | Todo el equipo  | QA y Testing                  | Pruebas funcionales, revisión conjunta, feedback                   |
 
