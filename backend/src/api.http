@@ -14,7 +14,6 @@ POST http://localhost:1234/productos
 Content-Type: application/json
 
 {
-  "id": "11111111-1111-1111-1111-111111111111",
   "nombre": "Ejemplo 3",
   "descripcion": "Descripción del producto",
   "precio": 1.1,
@@ -33,6 +32,7 @@ Content-Type: application/json
 {
   "precio": 0.5
 }
+
 
 # USUARIOS
 
@@ -56,3 +56,37 @@ Content-Type: application/json
   "email": "newuser@example.com",
   "password": "12345678"
 }
+
+
+# CARRITOS
+
+### Obtener el carrito de un usuario
+GET http://localhost:1234/carritos/1a2b3c4d
+Authorization: Bearer TU_TOKEN_AQUI
+
+### Añadir producto al carrito
+POST http://localhost:1234/carritos/1a2b3c4d
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+{
+  "productoId": "0f24c493-212e-11f0-9e1d-00155dae7a67",
+  "cantidad": 2
+}
+
+### Actualizar cantidad de producto en carrito
+PATCH http://localhost:1234/carritos/1a2b3c4d/0f24c493-212e-11f0-9e1d-00155dae7a67
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+{
+  "cantidad": 4
+}
+
+### Eliminar un producto del carrito
+DELETE http://localhost:1234/carritos/1a2b3c4d/0f24c493-212e-11f0-9e1d-00155dae7a67
+Authorization: Bearer TU_TOKEN_AQUI
+
+### Vaciar carrito
+DELETE http://localhost:1234/carritos/1a2b3c4d
+Authorization: Bearer TU_TOKEN_AQUI

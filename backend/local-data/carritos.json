@@ -1,0 +1,63 @@
+[
+    {
+      "usuario_id": "1a2b3c4d",
+      "productos": [
+        {
+          "producto_id": "0f24c493-212e-11f0-9e1d-00155dae7a67",
+          "cantidad": 2
+        },
+        {
+          "producto_id": "0f24cb21-212e-11f0-9e1d-00155dae7a67",
+          "cantidad": 1
+        }
+      ]
+    },
+    {
+      "usuario_id": "5e6f7g8h",
+      "productos": [
+        {
+          "producto_id": "0f24c938-212e-11f0-9e1d-00155dae7a67",
+          "cantidad": 3
+        }
+      ]
+    },
+    {
+      "usuario_id": "9i0j1k2l",
+      "productos": [
+        {
+          "producto_id": "0f24ca60-212e-11f0-9e1d-00155dae7a67",
+          "cantidad": 1
+        },
+        {
+          "producto_id": "7d5cdcfd-e0b9-4f76-b918-9518b8757535",
+          "cantidad": 4
+        }
+      ]
+    },
+    {
+      "usuario_id": "3m4n5o6p",
+      "productos": []
+    },
+    {
+      "usuario_id": "b00448ea-7a5d-4b07-9e01-5c2dc4a4b47b",
+      "productos": [
+        {
+          "producto_id": "0f24cb6b-212e-11f0-9e1d-00155dae7a67",
+          "cantidad": 2
+        }
+      ]
+    },
+    {
+      "usuario_id": "08d28941-dafc-4b55-ac04-6c0c6a69551e",
+      "productos": [
+        {
+          "producto_id": "0f24cab9-212e-11f0-9e1d-00155dae7a67",
+          "cantidad": 1
+        },
+        {
+          "producto_id": "0f24c9fd-212e-11f0-9e1d-00155dae7a67",
+          "cantidad": 2
+        }
+      ]
+    }
+  ]
