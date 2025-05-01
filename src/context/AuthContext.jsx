@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // En un entorno real, esto llamaría a tu API
       const userData = await iniciarSesion(email, password);
       localStorage.setItem("usuario", JSON.stringify(userData));
       setCurrentUser(userData);
@@ -40,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (nombre, email, password) => {
     try {
       // Llamada a la API para registrar al usuario
-      const response = await fetch('http://localhost:1234/usuarios/register', {
+      const response = await fetch('http://155.210.71.196:1234/usuarios/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
