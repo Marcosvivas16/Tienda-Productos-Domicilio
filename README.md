@@ -61,9 +61,9 @@ Puedes ver el cronograma del proyecto aquí: [Cronograma](/docs/cronograma.md)
 ## 🗓️ Calendario de Prototipos
 | Fecha         | Prototipo                                 | Objetivo                                   | Responsable     |
 |---------------|-------------------------------------------|--------------------------------------------|-----------------|
-| **18 marzo**  | Prototipo inicial estático (HTML/CSS)     | Estructura base de la interfaz             | Hatim           |
+| **18 marzo**  | Prototipo inicial estático (HTML/CSS)     | Estructura base de la interfaz             | Marcos           |
 | **20 marzo**  | Prototipo con navegación simulada         | Flujo visual entre pantallas               | Marcos + Hatim  |
-| **22 marzo**  | Prototipo interactivo con datos simulados | Interacción y lógica básica                | Marcos + Diego  |
+| **22 marzo**  | Prototipo interactivo con datos simulados | Interacción y lógica básica                | Diego  |
 | **23 marzo**  | Validación del prototipo con equipo       | Feedback conjunto y ajustes finales        | Todo el equipo  |
 
 ## 📅 Planificación del Proyecto - Diagrama de Gantt
