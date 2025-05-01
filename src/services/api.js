@@ -1,53 +1,6 @@
-// Importamos todos los módulos al inicio
-import productosJSON from '../data/productos.json';
 const API_BASE_URL = "http://155.210.71.196:1234";
 
-// Función para iniciar sesión
-export const iniciarSesion = async (email, password) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Credenciales incorrectas");
-    }
-
-    return await response.json(); // Devuelve el usuario autenticado
-  } catch (error) {
-    console.error("Error en inicio de sesión:", error);
-    throw error;
-  }
-};
-
-// Cerrar sesión (simulado localmente)
-export const cerrarSesion = async () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ success: true });
-    }, 300);
-  });
-};
-
-// Obtener datos de usuario por ID
-export const obtenerUsuario = async (userId) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/usuarios/${userId}`);
-    if (!response.ok) {
-      throw new Error("Usuario no encontrado");
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error al obtener usuario:", error);
-    throw error;
-  }
-};
-
-// Categorías (puedes ampliarlas desde backend si quieres)
+// Categorías
 const categorias = {
   1: "frutas",
   2: "verduras",
@@ -56,7 +9,7 @@ const categorias = {
   5: "bebidas",
   6: "carne",
   7: "pescado",
-  8: "congelados",
+  8: "congelados"
 };
 
 export const obtenerNombreCategoria = (categoriaId) => {
@@ -73,7 +26,7 @@ export const obtenerIdCategoria = (categoriaNombre) => {
   return 9;
 };
 
-// Adaptador de productos
+// Adaptador producto
 const adaptarProductoParaFrontend = (producto) => {
   return {
     id: producto.id,
@@ -87,7 +40,46 @@ const adaptarProductoParaFrontend = (producto) => {
   };
 };
 
-// Obtener todos los productos
+// ---------------------- USUARIOS ------------------------
+
+export const iniciarSesion = async (email, password) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/usuarios/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) throw new Error("Credenciales incorrectas");
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error en inicio de sesión:", error);
+    throw error;
+  }
+};
+
+export const cerrarSesion = async () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ success: true });
+    }, 300);
+  });
+};
+
+export const obtenerUsuario = async (userId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/usuarios/${userId}`);
+    if (!response.ok) throw new Error("Usuario no encontrado");
+    return await response.json();
+  } catch (error) {
+    console.error("Error al obtener usuario:", error);
+    throw error;
+  }
+};
+
+// ---------------------- PRODUCTOS ------------------------
+
 export const obtenerProductos = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/productos`);
@@ -100,7 +92,6 @@ export const obtenerProductos = async () => {
   }
 };
 
-// Obtener productos por categoría
 export const obtenerProductosPorCategoria = async (categoria) => {
   try {
     const response = await fetch(`${API_BASE_URL}/productos?categoria=${encodeURIComponent(categoria)}`);
@@ -113,7 +104,6 @@ export const obtenerProductosPorCategoria = async (categoria) => {
   }
 };
 
-// Obtener producto por ID
 export const obtenerProductoPorId = async (id) => {
   try {
     const response = await fetch(`${API_BASE_URL}/productos/${id}`);
@@ -126,7 +116,6 @@ export const obtenerProductoPorId = async (id) => {
   }
 };
 
-// Buscar productos
 export const buscarProductos = async (termino) => {
   try {
     const response = await fetch(`${API_BASE_URL}/productos?q=${encodeURIComponent(termino)}`);
@@ -139,7 +128,39 @@ export const buscarProductos = async (termino) => {
   }
 };
 
-// Guardar pedido
+// ---------------------- CARRITO ------------------------
+
+export const getCart = async (userId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/carrito/${userId}`);
+    if (!response.ok) throw new Error("Error al obtener el carrito");
+    return await response.json();
+  } catch (error) {
+    console.error("Error al cargar el carrito:", error);
+    return [];
+  }
+};
+
+export const saveCart = async (userId, items) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/carrito/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productos: items }),
+    });
+
+    if (!response.ok) throw new Error("Error al guardar el carrito");
+    return await response.json();
+  } catch (error) {
+    console.error("Error al guardar el carrito:", error);
+    throw error;
+  }
+};
+
+// ---------------------- PEDIDOS ------------------------
+
 export const guardarPedido = async (pedido) => {
   try {
     const response = await fetch(`${API_BASE_URL}/pedidos`, {
@@ -152,14 +173,13 @@ export const guardarPedido = async (pedido) => {
 
     if (!response.ok) throw new Error("Error al guardar el pedido");
 
-    return await response.json(); // Puede devolver { success: true } o el pedido creado
+    return await response.json();
   } catch (error) {
     console.error("Error al guardar pedido:", error);
     throw error;
   }
 };
 
-// Obtener historial de pedidos por usuario
 export const obtenerPedidos = async (userId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/pedidos?userId=${userId}`);
