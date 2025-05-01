@@ -158,18 +158,18 @@ export const getCart = async (userId, token) => {
   }
 };
 
-export const saveCart = async (userId, items) => {
+export const saveCart = async (userId, token, items) => {
   try {
     if (!userId) {
       console.error("Error: Se está intentando guardar un carrito sin ID de usuario");
-      return; // Terminar ejecución sin intentar la petición
+      return; 
     }
     
     const response = await fetch(`${API_BASE_URL}/carritos/${userId}`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('token') || ''}` 
+        "Authorization": `Bearer ${token}` 
       },
       body: JSON.stringify({ productos: items }),
     });

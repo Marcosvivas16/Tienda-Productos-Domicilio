@@ -21,7 +21,7 @@ const Carrito = () => {
     }
 
     try {
-      await guardarPedido(currentUser.id, cartItems);
+      await guardarPedido(currentUser.user.id, cartItems);
       alert("Pedido enviado correctamente.");
       navigate("/checkout");
     } catch (error) {

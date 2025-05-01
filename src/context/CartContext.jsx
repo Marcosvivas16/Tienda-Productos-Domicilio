@@ -17,7 +17,6 @@ export const CartProvider = ({ children }) => {
 
       try {
         const token = localStorage.getItem('token'); 
-        console.log("Token de usuario:", token);
         const data = await getCart(currentUser.user.id, token); 
         setCartItems(data);
       } catch (error) {
@@ -34,11 +33,11 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const updateCart = async () => {
       // Verificar si hay usuario y si tiene un ID válido
-      if (currentUser && (currentUser.id || currentUser._id)) {
+      if (currentUser && (currentUser.user.id)) {
         try {
-          const userId = currentUser.id || currentUser._id;
+          const userId = currentUser.user.id;
           console.log("Guardando carrito para usuario:", userId);
-          await saveCart(userId, cartItems);
+          await saveCart(userId, localStorage.getItem('token'), cartItems);
         } catch (error) {
           console.error("Error al guardar el carrito:", error);
         }
