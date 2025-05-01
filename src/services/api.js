@@ -1,6 +1,6 @@
 // Importamos todos los módulos al inicio
 import productosJSON from '../data/productos.json';
-const API_BASE_URL = "http://localhost:1234";
+const API_BASE_URL = "http://155.210.71.196:1234";
 
 // Servicio para la autenticación y datos
 
