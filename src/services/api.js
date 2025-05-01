@@ -59,12 +59,25 @@ export const iniciarSesion = async (email, password) => {
   }
 };
 
-export const cerrarSesion = async () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ success: true });
-    }, 300);
-  });
+export const logout = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/usuarios/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('token') || ''}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al cerrar sesión");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error al cerrar sesión:", error);
+    throw error;
+  }
 };
 
 export const obtenerUsuario = async (userId) => {
@@ -130,9 +143,13 @@ export const buscarProductos = async (termino) => {
 
 // ---------------------- CARRITO ------------------------
 
-export const getCart = async (userId) => {
+export const getCart = async (userId, token) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/carrito/${userId}`);
+    const response = await fetch(`${API_BASE_URL}/carritos/${userId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
     if (!response.ok) throw new Error("Error al obtener el carrito");
     return await response.json();
   } catch (error) {
@@ -148,7 +165,7 @@ export const saveCart = async (userId, items) => {
       return; // Terminar ejecución sin intentar la petición
     }
     
-    const response = await fetch(`${API_BASE_URL}/carrito/${userId}`, {
+    const response = await fetch(`${API_BASE_URL}/carritos/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

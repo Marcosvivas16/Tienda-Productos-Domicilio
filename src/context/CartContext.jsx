@@ -13,18 +13,17 @@ export const CartProvider = ({ children }) => {
   // Cargar carrito desde la API al iniciar sesión
   useEffect(() => {
     const fetchCart = async () => {
-      if (currentUser) {
-        try {
-          const data = await getCart(currentUser.id);
-          setCartItems(data);
-        } catch (error) {
-          console.error("Error al obtener el carrito:", error);
-          setCartItems([]);
-        } finally {
-          setLoading(false);
-        }
-      } else {
+      if (!currentUser) return; 
+
+      try {
+        const token = localStorage.getItem('token'); 
+        console.log("Token de usuario:", token);
+        const data = await getCart(currentUser.user.id, token); 
+        setCartItems(data);
+      } catch (error) {
+        console.error("Error al obtener el carrito:", error);
         setCartItems([]);
+      } finally {
         setLoading(false);
       }
     };

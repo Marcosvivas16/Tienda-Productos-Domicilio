@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { obtenerUsuario, iniciarSesion, cerrarSesion } from "../services/api";
+import { obtenerUsuario, iniciarSesion, logout as apiLogout } from "../services/api";
 
 const AuthContext = createContext();
 
@@ -28,7 +28,6 @@ export const AuthProvider = ({ children }) => {
     try {
       // Obtener datos del usuario al iniciar sesión
       const userData = await iniciarSesion(email, password);
-      
       // Verificar y asegurar que el objeto userData tenga un id válido
       const userWithId = {
         ...userData,
@@ -41,6 +40,7 @@ export const AuthProvider = ({ children }) => {
       console.log("Usuario después de login:", userWithId);
       
       // Guardar en localStorage y actualizar estado
+      localStorage.setItem("token", userData.token);
       localStorage.setItem("usuario", JSON.stringify(userWithId));
       setCurrentUser(userWithId);
       
@@ -120,9 +120,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    // En un entorno real, esto llamaría a tu API
-    cerrarSesion();
+    apiLogout();
     localStorage.removeItem("usuario");
+    localStorage.removeItem("token");
     setCurrentUser(null);
   };
 
