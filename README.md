@@ -109,6 +109,9 @@ A continuación se muestra el avance real del proyecto:
 ### 🛍️ Listado de Productos
 ![Productos](docs/diseño/listado.png)
 
+### 📄 Detalle del Producto
+![Producto](docs/diseño/producto.png)
+
 ### 🧾 Revisión del Pedido
 ![Revisar Pedido](docs/diseño/pedido.png)
 
@@ -117,5 +120,11 @@ A continuación se muestra el avance real del proyecto:
 
 ### 🔐 Iniciar Sesión
 ![Login](docs/diseño/sesion.png)
+
+### 🧍 Perfil de Usuario
+![Perfil](docs/diseño/perfil.png)
+
+### 📚 Historial de Pedidos
+![Historial](docs/diseño/historial.png)
 
 
