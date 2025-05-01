@@ -3,9 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import "../styles/Carrito.css";
+import { guardarPedido } from "../services/api"; // función que envia el pedido a la API
 
 const Carrito = () => {
-  const { isAuthenticated, isGuest } = useAuth();
+  const { isAuthenticated, isGuest, currentUser } = useAuth();
   const { cartItems, removeFromCart, updateQuantity, getTotal } = useCart();
   const navigate = useNavigate();
 
@@ -13,25 +14,36 @@ const Carrito = () => {
     return price.toFixed(2);
   };
 
-  const handleCheckout = () => {
-    if (isAuthenticated()) {
-      navigate("/checkout");
-    } else {
+  const handleCheckout = async () => {
+    if (!isAuthenticated()) {
       navigate("/login");
+      return;
+    }
+
+    try {
+      await guardarPedido(currentUser.id, cartItems);
+      alert("Pedido enviado correctamente.");
+      navigate("/checkout");
+    } catch (error) {
+      console.error("Error al guardar pedido:", error);
+      alert("Hubo un error al procesar el pedido.");
     }
   };
 
   return (
     <div className="carrito-container">
       <h2 className="carrito-titulo">Mi Carrito</h2>
-      
+
       {isGuest() && (
         <div className="carrito-alert">
           <i className="fas fa-exclamation-circle"></i>
-          <p>Estás en modo invitado. Para completar la compra, necesitas <Link to="/login">iniciar sesión</Link>.</p>
+          <p>
+            Estás en modo invitado. Para completar la compra, necesitas{" "}
+            <Link to="/login">iniciar sesión</Link>.
+          </p>
         </div>
       )}
-      
+
       {cartItems.length === 0 ? (
         <div className="carrito-vacio">
           <p>Tu carrito está vacío actualmente.</p>
@@ -45,32 +57,23 @@ const Carrito = () => {
                 <img src={item.imagen} alt={item.nombre} className="producto-imagen" />
                 <div className="producto-info">
                   <h3 className="producto-nombre">{item.nombre}</h3>
-                  <p className="producto-precio">${formatPrice(item.precio)}</p>
+                  <p className="producto-precio">{formatPrice(item.precio)}</p>
                 </div>
                 <div className="producto-cantidad">
-                  <button 
-                    className="cantidad-btn"
-                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                  >-</button>
-                  <span className="cantidad-valor">{item.quantity}</span>
-                  <button 
-                    className="cantidad-btn"
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                  >+</button>
+                  <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                 </div>
                 <div className="producto-subtotal">
                   ${formatPrice(item.precio * item.quantity)}
                 </div>
-                <button 
-                  className="eliminar-btn"
-                  onClick={() => removeFromCart(item.id)}
-                >
+                <button className="eliminar-btn" onClick={() => removeFromCart(item.id)}>
                   <i className="fas fa-trash"></i>
                 </button>
               </div>
             ))}
           </div>
-          
+
           <div className="carrito-resumen">
             <h3 className="resumen-titulo">Resumen del pedido</h3>
             <div className="resumen-item">
@@ -83,17 +86,13 @@ const Carrito = () => {
             </div>
             <div className="resumen-total">
               <span>Total</span>
-              <span>${formatPrice(getTotal() > 20 ? getTotal() : getTotal() + 2.99)}</span>
+              <span>
+                ${formatPrice(getTotal() > 20 ? getTotal() : getTotal() + 2.99)}
+              </span>
             </div>
-            
-            <button 
-              className="btn-comprar"
-              onClick={handleCheckout}
-              disabled={cartItems.length === 0}
-            >
+            <button className="btn-comprar" onClick={handleCheckout} disabled={cartItems.length === 0}>
               Finalizar compra
             </button>
-            
             <Link to="/productos" className="continuar-comprando">
               Continuar comprando
             </Link>

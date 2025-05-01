@@ -1,8 +1,11 @@
+// src/services/api.js
+
 // Importamos todos los módulos al inicio
 import productosJSON from '../data/productos.json';
+
 const API_BASE_URL = "http://localhost:1234";
 
-// Servicio para la autenticación y datos
+// === Servicio para la autenticación y datos ===
 
 // Usuarios de prueba
 const usuariosDemo = [
@@ -11,18 +14,16 @@ const usuariosDemo = [
     nombre: "Usuario Demo",
     email: "usuario@ejemplo.com",
     password: "123456",
-    isAuthenticated: true
-  }
+    isAuthenticated: true,
+  },
 ];
 
 // Obtener datos de un usuario por ID
 export const obtenerUsuario = async (userId) => {
-  // Simulamos una llamada a API
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const usuario = usuariosDemo.find(u => u.id === userId);
       if (usuario) {
-        // No devolver la contraseña al cliente
         const { password, ...userData } = usuario;
         resolve(userData);
       } else {
@@ -34,15 +35,12 @@ export const obtenerUsuario = async (userId) => {
 
 // Iniciar sesión
 export const iniciarSesion = async (email, password) => {
-  // Simulamos una llamada a API de autenticación
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const usuario = usuariosDemo.find(
         u => u.email === email && u.password === password
       );
-      
       if (usuario) {
-        // No devolver la contraseña al cliente
         const { password, ...userData } = usuario;
         resolve(userData);
       } else {
@@ -54,7 +52,6 @@ export const iniciarSesion = async (email, password) => {
 
 // Cerrar sesión
 export const cerrarSesion = async () => {
-  // Simulamos una llamada a API para cerrar sesión
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({ success: true });
@@ -62,7 +59,8 @@ export const cerrarSesion = async () => {
   });
 };
 
-// Mapa de categorías (para convertir entre ID y nombre)
+// === Productos y categorías ===
+
 const categorias = {
   1: "frutas",
   2: "verduras",
@@ -71,85 +69,73 @@ const categorias = {
   5: "bebidas",
   6: "carne",
   7: "pescado",
-  8: "congelados"
+  8: "congelados",
 };
 
-// Función para obtener el nombre de categoría a partir del ID
+// Obtener nombre de categoría por ID
 export const obtenerNombreCategoria = (categoriaId) => {
   return categorias[categoriaId] || "otros";
 };
 
-// Función para obtener el ID de categoría a partir del nombre
+// Obtener ID de categoría por nombre
 export const obtenerIdCategoria = (categoriaNombre) => {
   if (categoriaNombre === "todos") return 0;
-
   for (const [id, nombre] of Object.entries(categorias)) {
     if (nombre === categoriaNombre.toLowerCase()) {
       return parseInt(id);
     }
   }
-  return 9; // Categoría "otros" por defecto
+  return 9; // otros
 };
 
-// Adaptador para convertir la estructura del JSON a la estructura esperada por el frontend
+// Adaptar estructura del producto para frontend
 const adaptarProductoParaFrontend = (producto) => {
   return {
     id: producto.id,
     nombre: producto.nombre,
     precio: producto.precio,
-    // Usar directamente la URL de imagen del JSON
     imagen: producto.url_imagen || "https://via.placeholder.com/300",
     descripcion: producto.descripcion,
-    // Convertir ID a nombre de categoría
     categoria: obtenerNombreCategoria(producto.categoria_id),
     categoria_id: producto.categoria_id,
-    stock: producto.stock
+    stock: producto.stock,
   };
 };
 
-// Función para obtener todos los productos
+// Obtener todos los productos
 export const obtenerProductos = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/productos`);
-    if (!response.ok) {
-      throw new Error("Error al obtener productos");
-    }
+    if (!response.ok) throw new Error("Error al obtener productos");
+
     const productos = await response.json();
-    
-    // Adaptar los productos antes de devolverlos, igual que en obtenerProductosPorCategoria
-    const productosAdaptados = productos.map(adaptarProductoParaFrontend);
-    return productosAdaptados;
+    return productos.map(adaptarProductoParaFrontend);
   } catch (error) {
     console.error("Error al cargar productos desde la API:", error);
-    
-    // Si falla, devolver los productos del JSON local ya adaptados
     return productosJSON.map(adaptarProductoParaFrontend);
   }
 };
 
+// Obtener productos por categoría
 export const obtenerProductosPorCategoria = async (categoria) => {
   try {
     const response = await fetch(`${API_BASE_URL}/productos?categoria=${encodeURIComponent(categoria)}`);
-    if (!response.ok) {
-      throw new Error("Error al obtener productos por categoría");
-    }
+    if (!response.ok) throw new Error("Error al obtener productos por categoría");
+
     const productos = await response.json();
-    
-    const productosAdaptados = productos.map(adaptarProductoParaFrontend);
-    return productosAdaptados;
+    return productos.map(adaptarProductoParaFrontend);
   } catch (error) {
     console.error("Error al cargar productos desde la API:", error);
     throw error;
   }
 };
 
-// Función para obtener un producto específico por ID
+// Obtener producto por ID
 export const obtenerProductoPorId = (id) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const producto = productosJSON.find(p => p.id === id);
       if (producto) {
-        // Adaptar el producto
         resolve(adaptarProductoParaFrontend(producto));
       } else {
         reject(new Error("Producto no encontrado"));
@@ -158,13 +144,11 @@ export const obtenerProductoPorId = (id) => {
   });
 };
 
-// Función para buscar productos
+// Buscar productos
 export const buscarProductos = async (terminoBusqueda) => {
   try {
-    // Obtener todos los productos y filtrar
     const productos = await obtenerProductos();
-    
-    return productos.filter(producto => 
+    return productos.filter(producto =>
       producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
       producto.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase())
     );
@@ -172,4 +156,30 @@ export const buscarProductos = async (terminoBusqueda) => {
     console.error(`Error buscando productos con término "${terminoBusqueda}":`, error);
     throw error;
   }
+};
+
+// === Guardar pedido (nueva función) ===
+export const guardarPedido = async (userId, productos) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("Pedido guardado (simulado):", {
+        usuario: userId,
+        productos: productos,
+        fecha: new Date().toISOString(),
+        total: productos.reduce((t, p) => t + p.precio * p.quantity, 0).toFixed(2)
+      });
+      resolve({ success: true });
+    }, 500);
+  });
+
+  // Si usas un backend real, sustituye lo anterior por:
+  /*
+  const response = await fetch(`${API_BASE_URL}/pedidos`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, productos }),
+  });
+  if (!response.ok) throw new Error("Error al guardar el pedido");
+  return await response.json();
+  */
 };

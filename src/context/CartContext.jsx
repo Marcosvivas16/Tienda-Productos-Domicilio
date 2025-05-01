@@ -1,112 +1,87 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useAuth } from "./AuthContext";
+import { getCart, saveCart } from "../services/api";
 
 const CartContext = createContext();
-
-export const useCart = () => {
-  return useContext(CartContext);
-};
+export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const { currentUser } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Cargar carrito cuando cambia el usuario
+  // Cargar carrito desde la API al iniciar sesión
   useEffect(() => {
-    if (currentUser) {
-      const userId = currentUser.id;
-      const savedCart = localStorage.getItem(`cart-${userId}`);
-      
-      if (savedCart) {
+    const fetchCart = async () => {
+      if (currentUser) {
         try {
-          setCartItems(JSON.parse(savedCart));
-        } catch (e) {
-          console.error("Error parsing cart data", e);
+          const data = await getCart(currentUser.id);
+          setCartItems(data);
+        } catch (error) {
+          console.error("Error al obtener el carrito:", error);
           setCartItems([]);
+        } finally {
+          setLoading(false);
         }
       } else {
         setCartItems([]);
+        setLoading(false);
       }
-    } else {
-      setCartItems([]);
-    }
-    
-    setLoading(false);
+    };
+    fetchCart();
   }, [currentUser]);
 
-  // Guardar carrito cuando cambia
+  // Guardar el carrito en la API cada vez que cambie
   useEffect(() => {
-    if (currentUser && !loading) {
-      const userId = currentUser.id;
-      localStorage.setItem(`cart-${userId}`, JSON.stringify(cartItems));
-    }
+    const updateCart = async () => {
+      if (currentUser && !loading) {
+        try {
+          await saveCart(currentUser.id, cartItems);
+        } catch (error) {
+          console.error("Error al guardar el carrito:", error);
+        }
+      }
+    };
+    updateCart();
   }, [cartItems, currentUser, loading]);
 
-  // Añadir producto al carrito
+  // Funciones de gestión del carrito
   const addToCart = (product, quantity = 1) => {
-    setCartItems(prevItems => {
-      // Verificar si el producto ya está en el carrito
-      const existingItem = prevItems.find(item => item.id === product.id);
-      
-      if (existingItem) {
-        // Actualizar cantidad si ya existe
-        return prevItems.map(item => 
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      } else {
-        // Añadir nuevo item si no existe
-        return [...prevItems, { ...product, quantity }];
-      }
-    });
-  };
-
-  // Eliminar producto del carrito
-  const removeFromCart = (productId) => {
-    setCartItems(prevItems => 
-      prevItems.filter(item => item.id !== productId)
+    setCartItems(prev =>
+      prev.some(item => item.id === product.id)
+        ? prev.map(item =>
+            item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+          )
+        : [...prev, { ...product, quantity }]
     );
   };
 
-  // Actualizar cantidad de un producto
+  const removeFromCart = (productId) => {
+    setCartItems(prev => prev.filter(item => item.id !== productId));
+  };
+
   const updateQuantity = (productId, quantity) => {
-    if (quantity <= 0) {
-      removeFromCart(productId);
-      return;
-    }
-    
-    setCartItems(prevItems => 
-      prevItems.map(item => 
-        item.id === productId
-          ? { ...item, quantity }
-          : item
+    if (quantity <= 0) return removeFromCart(productId);
+    setCartItems(prev =>
+      prev.map(item =>
+        item.id === productId ? { ...item, quantity } : item
       )
     );
   };
 
-  // Calcular total del carrito
-  const getTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.precio * item.quantity,
-      0
-    );
-  };
+  const clearCart = () => setCartItems([]);
 
-  // Vaciar carrito
-  const clearCart = () => {
-    setCartItems([]);
-  };
+  const getTotal = () =>
+    cartItems.reduce((total, item) => total + item.precio * item.quantity, 0);
 
   const value = {
     cartItems,
     addToCart,
     removeFromCart,
     updateQuantity,
-    getTotal,
     clearCart,
-    loading
+    getTotal,
+    loading,
   };
 
   return (
