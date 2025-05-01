@@ -1,16 +1,16 @@
 # PRODUCTOS
 
 ### Recuperar productos
-GET http://localhost:1234/productos
+GET http://155.210.71.196:1234/productos
 
 ### Recuperar un producto por ID
-GET http://localhost:1234/productos/14f67968-b2b6-4fff-8f7e-636a4c001ce0
+GET http://155.210.71.196:1234/productos/14f67968-b2b6-4fff-8f7e-636a4c001ce0
 
 ### Recuperar productos por categoría
-GET http://localhost:1234/productos?categoria=Frutas
+GET http://155.210.71.196:1234/productos?categoria=Frutas
 
 ### Crear un producto
-POST http://localhost:1234/productos
+POST http://155.210.71.196:1234/productos
 Content-Type: application/json
 
 {
@@ -23,10 +23,10 @@ Content-Type: application/json
 }
 
 ### Eliminar un producto
-DELETE http://localhost:1234/productos/d93f4996-3a4a-42cf-b456-544c29d53888
+DELETE http://155.210.71.196:1234/productos/d93f4996-3a4a-42cf-b456-544c29d53888
 
 ### Actualizar un producto
-PATCH  http://localhost:1234/productos/d93f4996-3a4a-42cf-b456-544c29d53888
+PATCH  http://155.210.71.196:1234/productos/d93f4996-3a4a-42cf-b456-544c29d53888
 Content-Type: application/json
 
 {
@@ -37,19 +37,19 @@ Content-Type: application/json
 # USUARIOS
 
 ### Recuperar todos los usuarios
-GET http://localhost:1234/usuarios
+GET http://155.210.71.196:1234/usuarios
 
 ### Registrar un nuevo usuario
-POST http://localhost:1234/usuarios/register
+POST http://155.210.71.196:1234/usuarios/register
 Content-Type: application/json
 
 {
-  "email": "newuser@example.com",
-  "password": "12345678"
+  "email": "m@example.com",
+  "password": "1234567"
 }
 
 ### Hacer login
-POST http://localhost:1234/usuarios/login
+POST http://155.210.71.196:1234/usuarios/login
 Content-Type: application/json
 
 {
@@ -61,11 +61,11 @@ Content-Type: application/json
 # CARRITOS
 
 ### Obtener el carrito de un usuario
-GET http://localhost:1234/carritos/1a2b3c4d
+GET http://155.210.71.196:1234/carritos/1a2b3c4d
 Authorization: Bearer TU_TOKEN_AQUI
 
 ### Añadir producto al carrito
-POST http://localhost:1234/carritos/1a2b3c4d
+POST http://155.210.71.196:1234/carritos/1a2b3c4d
 Content-Type: application/json
 Authorization: Bearer TU_TOKEN_AQUI
 
@@ -75,7 +75,7 @@ Authorization: Bearer TU_TOKEN_AQUI
 }
 
 ### Actualizar cantidad de producto en carrito
-PATCH http://localhost:1234/carritos/1a2b3c4d/0f24c493-212e-11f0-9e1d-00155dae7a67
+PATCH http://155.210.71.196:1234/carritos/1a2b3c4d/0f24c493-212e-11f0-9e1d-00155dae7a67
 Content-Type: application/json
 Authorization: Bearer TU_TOKEN_AQUI
 
@@ -84,9 +84,9 @@ Authorization: Bearer TU_TOKEN_AQUI
 }
 
 ### Eliminar un producto del carrito
-DELETE http://localhost:1234/carritos/1a2b3c4d/0f24c493-212e-11f0-9e1d-00155dae7a67
+DELETE http://155.210.71.196:1234/carritos/1a2b3c4d/0f24c493-212e-11f0-9e1d-00155dae7a67
 Authorization: Bearer TU_TOKEN_AQUI
 
 ### Vaciar carrito
-DELETE http://localhost:1234/carritos/1a2b3c4d
+DELETE http://155.210.71.196:1234/carritos/1a2b3c4d
 Authorization: Bearer TU_TOKEN_AQUI
