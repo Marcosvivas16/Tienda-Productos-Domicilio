@@ -143,15 +143,24 @@ export const getCart = async (userId) => {
 
 export const saveCart = async (userId, items) => {
   try {
+    if (!userId) {
+      console.error("Error: Se está intentando guardar un carrito sin ID de usuario");
+      return; // Terminar ejecución sin intentar la petición
+    }
+    
     const response = await fetch(`${API_BASE_URL}/carrito/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('token') || ''}` 
       },
       body: JSON.stringify({ productos: items }),
     });
 
-    if (!response.ok) throw new Error("Error al guardar el carrito");
+    if (!response.ok) {
+      throw new Error("Error al guardar el carrito");
+    }
+    
     return await response.json();
   } catch (error) {
     console.error("Error al guardar el carrito:", error);

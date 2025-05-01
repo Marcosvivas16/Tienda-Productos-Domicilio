@@ -34,16 +34,24 @@ export const CartProvider = ({ children }) => {
   // Guardar el carrito en la API cada vez que cambie
   useEffect(() => {
     const updateCart = async () => {
-      if (currentUser && !loading) {
+      // Verificar si hay usuario y si tiene un ID válido
+      if (currentUser && (currentUser.id || currentUser._id)) {
         try {
-          await saveCart(currentUser.id, cartItems);
+          const userId = currentUser.id || currentUser._id;
+          console.log("Guardando carrito para usuario:", userId);
+          await saveCart(userId, cartItems);
         } catch (error) {
           console.error("Error al guardar el carrito:", error);
         }
+      } else if (currentUser) {
+        console.warn("No se puede guardar el carrito: ID de usuario no encontrado", currentUser);
       }
     };
-    updateCart();
-  }, [cartItems, currentUser, loading]);
+    
+    if (cartItems.length > 0) {
+      updateCart();
+    }
+  }, [cartItems, currentUser]);
 
   // Funciones de gestión del carrito
   const addToCart = (product, quantity = 1) => {

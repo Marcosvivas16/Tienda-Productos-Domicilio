@@ -26,10 +26,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      // Obtener datos del usuario al iniciar sesión
       const userData = await iniciarSesion(email, password);
-      localStorage.setItem("usuario", JSON.stringify(userData));
-      setCurrentUser(userData);
-      return userData;
+      
+      // Verificar y asegurar que el objeto userData tenga un id válido
+      const userWithId = {
+        ...userData,
+        id: userData.id || userData._id || userData.usuario_id || userData.userId,
+        isAuthenticated: true,
+        isGuest: false
+      };
+      
+      // Imprimir para depuración
+      console.log("Usuario después de login:", userWithId);
+      
+      // Guardar en localStorage y actualizar estado
+      localStorage.setItem("usuario", JSON.stringify(userWithId));
+      setCurrentUser(userWithId);
+      
+      return userWithId;
     } catch (error) {
       throw error;
     }
@@ -58,16 +73,29 @@ export const AuthProvider = ({ children }) => {
   
       const data = await response.json();
       
-      // Crear el objeto de usuario con la propiedad isAuthenticated
+      // Verificar la estructura completa de la respuesta
+      console.log("Respuesta completa de registro:", data);
+      
+      // Asegurar que el usuario tenga un ID válido
+      const userId = data.user?.id || data.user?._id || data.usuario_id || data.id;
+      
+      if (!userId) {
+        console.warn("Advertencia: La respuesta no contiene un ID de usuario visible:", data);
+      }
+      
+      // Crear el objeto de usuario con todas las propiedades necesarias
       const userData = {
         ...data.user,
-        isAuthenticated: true,  // Añadir esta propiedad para mantener coherencia
-        isGuest: false          // Indicar explícitamente que no es un invitado
+        id: userId, // Asignar el ID identificado
+        isAuthenticated: true,
+        isGuest: false
       };
+      
+      console.log("Usuario después de registro:", userData);
       
       // Guardar token y usuario en localStorage
       localStorage.setItem('token', data.token);
-      localStorage.setItem('usuario', JSON.stringify(userData)); // Usar 'usuario' como en login()
+      localStorage.setItem('usuario', JSON.stringify(userData));
       
       // Actualizar el estado
       setCurrentUser(userData);
