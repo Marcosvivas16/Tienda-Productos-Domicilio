@@ -1,6 +1,6 @@
-// src/services/api.js
-
-const API_BASE_URL = "http://localhost:1234";
+// Importamos todos los módulos al inicio
+import productosJSON from '../data/productos.json';
+const API_BASE_URL = "http://155.210.71.196:1234";
 
 // Función para iniciar sesión
 export const iniciarSesion = async (email, password) => {

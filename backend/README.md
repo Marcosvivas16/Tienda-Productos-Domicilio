@@ -1,9 +1,7 @@
-# README.md - API de Productos
+# API de Productos, Usuarios y Carritos
 
 ## Descripción
-Esta API permite gestionar productos y usuarios de una tienda de productos a domicilio.
-Actualmente los datos se manejan en archivos JSON locales.
-En el futuro se añadirá conexión a MySQL.
+Esta API permite gestionar productos, usuarios y los carritos de una tienda de productos a domicilio.
 
 ## Instalación
 1. Navega al directorio del backend:
@@ -28,7 +26,7 @@ En el futuro se añadirá conexión a MySQL.
      npm run start:local
      ```
 
-El servidor estará disponible en **[http://localhost:1234](http://localhost:1234)**.
+El servidor estará disponible en **[http://155.210.71.196:1234](http://155.210.71.196:1234)**.
 
 ## Estructura de datos
 
@@ -67,9 +65,18 @@ Los productos utilizan categoria_id asociado a la lista de categorías. Para cre
 
 Cada usuario tiene: email y contraseña.
 
+### Carrito
+
+- Obtener el carrito de un usuario (`GET /carritos/:usuarioId`)
+- Añadir un producto al carrito (`POST /carritos/:usuarioId`)
+- Actualizar la cantidad de un producto en el carrito (`PATCH /carritos/:usuarioId/:productoId`)
+- Eliminar un producto del carrito (`DELETE /carritos/:usuarioId/:productoId`)
+- Vaciar el carrito (`DELETE /carritos/:usuarioId`)
+
 ## Autenticación
 La API utiliza autenticación basada en JWT (JSON Web Tokens). Aquí tienes un resumen de cómo funciona:
 
 - **Login (`POST /usuarios/login`)**: Devuelve un token JWT que se almacena en una cookie llamada `access_token`.
 - **Logout (`POST /usuarios/logout`)**: Elimina la cookie `access_token` para cerrar la sesión.
 - **Endpoints protegidos**: Los endpoints protegidos requieren que el cliente envíe la cookie `access_token` en cada solicitud.
+
