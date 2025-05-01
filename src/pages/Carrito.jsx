@@ -11,7 +11,8 @@ const Carrito = () => {
   const navigate = useNavigate();
 
   const formatPrice = (price) => {
-    return price.toFixed(2);
+    const numericPrice = parseFloat(price);
+    return isNaN(numericPrice) ? "0.00" : numericPrice.toFixed(2);
   };
 
   const handleCheckout = async () => {
@@ -57,7 +58,7 @@ const Carrito = () => {
                 <img src={item.imagen} alt={item.nombre} className="producto-imagen" />
                 <div className="producto-info">
                   <h3 className="producto-nombre">{item.nombre}</h3>
-                  <p className="producto-precio">{formatPrice(item.precio)}</p>
+                  <p className="producto-precio">{formatPrice(item.precio)} €</p>
                 </div>
                 <div className="producto-cantidad">
                   <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
@@ -65,7 +66,7 @@ const Carrito = () => {
                   <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                 </div>
                 <div className="producto-subtotal">
-                  ${formatPrice(item.precio * item.quantity)}
+                  {formatPrice(item.precio * item.quantity)} €
                 </div>
                 <button className="eliminar-btn" onClick={() => removeFromCart(item.id)}>
                   <i className="fas fa-trash"></i>
@@ -78,16 +79,16 @@ const Carrito = () => {
             <h3 className="resumen-titulo">Resumen del pedido</h3>
             <div className="resumen-item">
               <span>Subtotal</span>
-              <span>${formatPrice(getTotal())}</span>
+              <span>{formatPrice(getTotal())} €</span>
             </div>
             <div className="resumen-item">
               <span>Gastos de envío</span>
-              <span>{getTotal() > 20 ? "Gratis" : "$2.99"}</span>
+              <span>{getTotal() > 20 ? "Gratis" : "2.99 €"}</span>
             </div>
             <div className="resumen-total">
               <span>Total</span>
               <span>
-                ${formatPrice(getTotal() > 20 ? getTotal() : getTotal() + 2.99)}
+                {formatPrice(getTotal() > 20 ? getTotal() : getTotal() + 2.99)} €
               </span>
             </div>
             <button className="btn-comprar" onClick={handleCheckout} disabled={cartItems.length === 0}>
