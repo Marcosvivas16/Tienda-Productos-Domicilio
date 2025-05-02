@@ -1,4 +1,4 @@
-import { validatePartialUsuario, validateUsuario } from '../schemes/usuarios.js'
+import { validatePartialUsuario, validateRegistro } from '../schemes/usuarios.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
@@ -31,7 +31,7 @@ export class UsuarioController {
     // Añadir esto para depuración
     console.log('Datos recibidos en register:', req.body);
     
-    const result = validateUsuario(req.body)
+    const result = validateRegistro(req.body)
 
     if (!result.success) {
       // Mostrar errores detallados
@@ -63,7 +63,7 @@ export class UsuarioController {
   }
 
   login = async (req, res) => {
-    const result = validateUsuario(req.body)
+    const result = validateLogin(req.body)
 
     if (!result.success) {
       return res.status(400).json({ error: JSON.parse(result.error.message) })
