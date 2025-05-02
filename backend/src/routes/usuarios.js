@@ -9,11 +9,15 @@ export const createUsuarioRouter = ({ usuarioModel }) => {
 
     usuariosRouter.get("/", usuarioController.getAll)
 
+    usuariosRouter.get("/:id",  authenticateJWT, usuarioController.getById)
+
     usuariosRouter.post("/login", usuarioController.login)
 
     usuariosRouter.post("/register", usuarioController.register)
 
-    usuariosRouter.post("/logout", usuarioController.logout)
+    usuariosRouter.post("/logout",  authenticateJWT,usuarioController.logout)
+
+    usuariosRouter.update("/update/:id", authenticateJWT, usuarioController.update)
 
     usuariosRouter.get("/protected", authenticateJWT, usuarioController.protected) 
 

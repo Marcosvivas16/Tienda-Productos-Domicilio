@@ -25,6 +25,18 @@ export class UsuarioModel {
         return usuarios
     }
 
+    static async getById ({ id }) {
+		const [usuarios] = await connection.query(
+			`SELECT BIN_TO_UUID(id) AS id, email
+				FROM usuario WHERE id = UUID_TO_BIN(?);`,
+			[id]
+		)
+
+		if (usuarios.length === 0) return null
+	
+		return usuarios[0]
+	}
+
     static async register ({ input }) {
         const { email, password } = input
 
@@ -79,6 +91,40 @@ export class UsuarioModel {
           };
         
     }
+
+    static async update ({ id, input }) {
+		const fields = []
+		const values = []
+
+        for (const key in input) {
+            if (key === 'password') {
+                const hashedPassword = await bcrypt.hash(input[key], 10)
+                fields.push(`${key} = ?`)
+                values.push(hashedPassword)
+            } else {
+                fields.push(`${key} = ?`)
+                values.push(input[key])
+            }
+        }
+    
+		if (fields.length === 0) {
+			throw new Error('No se proporcionaron campos para actualizar')
+		}
+
+		try {
+			await connection.query(
+				`UPDATE usuario
+				 SET ${fields.join(', ')}
+				 WHERE id = UUID_TO_BIN(?);`,
+				[...values, id]
+			)
+		} catch (e) {
+			throw new Error('Error actualizando el usuario')
+		}
+
+		const usuarioActualizado = await this.getById({ id })
+		return usuarioActualizado
+	}
 
     static async protected({id}) {
         const [[user]] = await connection.query(

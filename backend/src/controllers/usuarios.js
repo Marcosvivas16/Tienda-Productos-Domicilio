@@ -1,4 +1,4 @@
-import { validateUsuario } from '../schemes/usuarios.js'
+import { validatePartialUsuario, validateUsuario } from '../schemes/usuarios.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
@@ -12,6 +12,19 @@ export class UsuarioController {
   getAll = async (req, res) => {
     const usuarios = await this.usuarioModel.getAll()
     res.json(usuarios)
+  }
+
+  getById = async (req, res) => {
+    const { id } = req.params
+    const loggedUserId = req.user?.id
+    
+    if (loggedUserId !== id) {
+      return res.status(403).json({ error: 'No tienes permiso para ver este usuario.' })
+    }
+  
+    const usuario = await this.usuarioModel.getById({ id })
+    if (usuario) return res.json(usuario)
+    res.status(404).json({ message: 'Usuario no encontrado' })
   }
 
   register = async (req, res) => {
@@ -57,6 +70,10 @@ export class UsuarioController {
   }
 
   logout = async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'No hay sesión activa.' })
+    }    
+
     try {
       res
         .clearCookie("access_token")
@@ -66,6 +83,33 @@ export class UsuarioController {
       res.status(500).json({ message: "Error al cerrar sesión", error: error.message })
     }
   }
+  
+  update = async (req, res) => {
+    const { id } = req.params
+    const loggedUserId = req.user?.id
+    if (loggedUserId !== id) {
+      return res.status(403).json({ error: 'No tienes permiso para modificar este usuario.' })
+    }    
+
+    const result = validatePartialUsuario(req.body)
+  
+    if (!result.success) {
+      return res.status(400).json({ error: JSON.parse(result.error.message) })
+    }
+    
+    try {
+      const usuarioActualizado = await this.usuarioModel.update({ id, input: result.data })
+  
+      if (!usuarioActualizado) {
+        return res.status(404).json({ error: 'Usuario no encontrado' })
+      }
+  
+      return res.json(usuarioActualizado)
+    } catch (error) {
+      return res.status(500).json({ error: error.message })
+    }
+  }
+  
 
   protected = async (req, res) => {
     const { user } = req
