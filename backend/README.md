@@ -58,9 +58,11 @@ Los productos utilizan categoria_id asociado a la lista de categorías. Para cre
 ### Usuarios
 
 - Obtener todos los usuarios (`GET /usuarios`)
+- Obtener un usuario por ID (`GET /usuarios/:id`)
 - Registrar un nuevo usuario (`POST /usuarios/register`)
 - Login de usuario (`POST /usuarios/login`)
 - Logout de usuario (`POST /usuarios/logout`)
+- Actualizar un usuario (`PATCH /usuarios/update/:id`)
 - Acceso a un endpoint protegido (`GET /usuarios/protected`)
 
 Cada usuario tiene: email y contraseña.
