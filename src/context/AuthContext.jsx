@@ -26,27 +26,33 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // Obtener datos del usuario al iniciar sesión
-      const userData = await iniciarSesion(email, password);
-      // Verificar y asegurar que el objeto userData tenga un id válido
+      const response = await iniciarSesion(email, password);
+      console.log("Respuesta completa de login:", response);
+      
+      // Validación más estricta: requerimos explícitamente user.id y token
+      if (!response || !response.user || !response.user.id || !response.token) {
+        console.error("Respuesta de login inválida:", response);
+        throw new Error("Los datos de autenticación son incorrectos");
+      }
+      
+      // Crear objeto con estructura consistente
       const userWithId = {
-        ...userData,
-        id: userData.id || userData._id || userData.usuario_id || userData.userId,
+        ...response.user,
+        id: response.user.id,
+        nombre: response.user.nombre || email.split('@')[0], // Asegurar que tenga nombre
+        token: response.token,
         isAuthenticated: true,
         isGuest: false
       };
       
-      // Imprimir para depuración
-      console.log("Usuario después de login:", userWithId);
-      
-      // Guardar en localStorage y actualizar estado
-      localStorage.setItem("token", userData.token);
+      localStorage.setItem("token", response.token);
       localStorage.setItem("usuario", JSON.stringify(userWithId));
       setCurrentUser(userWithId);
       
       return userWithId;
     } catch (error) {
-      throw error;
+      console.error("Error en login:", error);
+      throw error; // Asegurarse de que el error se propague hacia arriba
     }
   };
 

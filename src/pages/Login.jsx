@@ -18,14 +18,15 @@ const Login = () => {
     
     try {
       await login(email, password);
-      navigate("/");
+      navigate("/"); // Solo navegar si login es exitoso
     } catch (err) {
-      setError("Credenciales incorrectas. Intenta con usuario@ejemplo.com / 123456");
+      console.error("Error de autenticación:", err);
+      setError(err.message || "Credenciales incorrectas. Verifique su email y contraseña.");
+      // No hacer navigate aquí, mantener al usuario en la página de login
     } finally {
       setLoading(false);
     }
   };
-
   const handleGuestAccess = () => {
     loginAsGuest();
     navigate("/");

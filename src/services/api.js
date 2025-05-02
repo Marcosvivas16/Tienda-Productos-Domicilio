@@ -44,17 +44,33 @@ const adaptarProductoParaFrontend = (producto) => {
 
 export const iniciarSesion = async (email, password) => {
   try {
+    console.log("Intentando iniciar sesión con:", email);
     const response = await fetch(`${API_BASE_URL}/usuarios/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ email, password }),
     });
 
-    if (!response.ok) throw new Error("Credenciales incorrectas");
+    // Verificar si la respuesta es correcta
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "Credenciales incorrectas");
+    }
 
-    return await response.json();
+    const data = await response.json();
+    
+    // Verificar que la respuesta tenga una estructura válida
+    // Un token válido y un objeto usuario con un ID
+    if (!data.token || !data.user || !data.user.id) {
+      console.error("Estructura de respuesta inválida:", data);
+      throw new Error("Estructura de autenticación incorrecta");
+    }
+    
+    return data;
   } catch (error) {
-    console.error("Error en inicio de sesión:", error);
+    console.error("Error en iniciarSesion:", error);
     throw error;
   }
 };
@@ -145,15 +161,35 @@ export const buscarProductos = async (termino) => {
 
 export const getCart = async (userId, token) => {
   try {
+    if (!userId) {
+      console.warn("ID de usuario no disponible para obtener carrito");
+      return [];
+    }
+    
+    if (!token) {
+      console.warn("Token no disponible para obtener carrito");
+      return [];
+    }
+    
     const response = await fetch(`${API_BASE_URL}/carritos/${userId}`, {
       headers: {
-        "Authorization": `Bearer ${token}`,
-      },
+        "Authorization": `Bearer ${token}`
+      }
     });
-    if (!response.ok) throw new Error("Error al obtener el carrito");
+    
+    if (response.status === 401) {
+      console.error("Error de autorización al obtener carrito");
+      return [];
+    }
+    
+    if (!response.ok) {
+      console.error(`Error ${response.status} al obtener carrito`);
+      return [];
+    }
+    
     return await response.json();
   } catch (error) {
-    console.error("Error al cargar el carrito:", error);
+    console.error("Error al obtener carrito:", error);
     return [];
   }
 };
