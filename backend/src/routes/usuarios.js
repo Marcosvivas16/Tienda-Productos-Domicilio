@@ -17,7 +17,7 @@ export const createUsuarioRouter = ({ usuarioModel }) => {
 
     usuariosRouter.post("/logout",  authenticateJWT,usuarioController.logout)
 
-    usuariosRouter.update("/update/:id", authenticateJWT, usuarioController.update)
+    usuariosRouter.patch("/update/:id", authenticateJWT, usuarioController.update)
 
     usuariosRouter.get("/protected", authenticateJWT, usuarioController.protected) 
 
