@@ -91,3 +91,25 @@ Authorization: Bearer TU_TOKEN_AQUI
 ### Vaciar carrito
 DELETE http://155.210.71.196:1234/carritos/1a2b3c4d
 Authorization: Bearer TU_TOKEN_AQUI
+
+
+# PEDIDOS
+
+### Guardar un nuevo pedido
+POST http://155.210.71.196:1234/pedidos
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+{
+  "usuario_id": "1a2b3c4d-5e6f-7g8h-9i10-abcdef123456",
+  "productos": [
+    {
+      "id": "0f24c493-212e-11f0-9e1d-00155dae7a67",
+      "cantidad": 3
+    },
+    {
+      "id": "ab12cd34-5678-9ef0-1234-56789abcdef0",
+      "cantidad": 1
+    }
+  ]
+}
