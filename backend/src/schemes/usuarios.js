@@ -1,6 +1,10 @@
 import z from 'zod'
 
 const usuarioSchema = z.object({
+  nombre: z.string({
+    invalid_type_error: 'El nombre debe ser un texto.',
+    required_error: 'El nombre del usuario es obligatorio.'
+  }).min(2, { message: 'El nombre debe tener al menos 2 caracteres.' }),
   email: z.string({
     invalid_type_error: 'El email debe ser un texto.',
     required_error: 'El email del usuario es obligatorio.'

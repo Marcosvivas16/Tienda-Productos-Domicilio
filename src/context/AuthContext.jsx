@@ -112,61 +112,86 @@ function extractUserIdFromToken(token) {
 }
 
 
-  const register = async (nombre, email, password) => {
-    try {
-      // Llamada a la API para registrar al usuario
-      const response = await fetch('http://155.210.71.196:1234/usuarios/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nombre,
-          email,
-          password
-        })
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al registrar usuario');
-      }
-  
-      const data = await response.json();
-      
-      // Verificar la estructura completa de la respuesta
-      console.log("Respuesta completa de registro:", data);
-      
-      // Asegurar que el usuario tenga un ID válido
-      const userId = data.user?.id || data.user?._id || data.usuario_id || data.id;
-      
-      if (!userId) {
-        console.warn("Advertencia: La respuesta no contiene un ID de usuario visible:", data);
-      }
-      
-      // Crear el objeto de usuario con todas las propiedades necesarias
-      const userData = {
-        ...data.user,
-        id: userId, // Asignar el ID identificado
-        isAuthenticated: true,
-        isGuest: false
-      };
-      
-      console.log("Usuario después de registro:", userData);
-      
-      // Guardar token y usuario en localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('usuario', JSON.stringify(userData));
-      
-      // Actualizar el estado
-      setCurrentUser(userData);
-      
-      return data;
-    } catch (error) {
-      console.error('Error en registro:', error);
-      throw error;
+const register = async (nombre, email, password) => {
+  try {
+    // Verificar que los datos estén completos
+    if (!nombre || !email || !password) {
+      throw new Error("Todos los campos son obligatorios");
     }
-  };
+
+    // Asegurarse de que el email tenga formato correcto
+    if (!email.includes('@') || !email.includes('.')) {
+      throw new Error("El formato del email es incorrecto");
+    }
+
+    // Verificar longitud mínima de la contraseña
+    if (password.length < 6) {
+      throw new Error("La contraseña debe tener al menos 6 caracteres");
+    }
+
+    // Formato que espera la API (ajustar según la documentación)
+    const userData = {
+      nombre: nombre,
+      email: email,
+      password: password
+      // No añadir campos adicionales que la API no espera
+    };
+
+    console.log("Enviando datos de registro:", JSON.stringify(userData, null, 2));
+
+    const response = await fetch(`${API_BASE_URL}/usuarios/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    // Mejorar el manejo de errores
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      const errorMessage = errorData && errorData.message 
+        ? errorData.message 
+        : `Error ${response.status} al registrar usuario`;
+      
+      console.error("Error respuesta API:", errorMessage);
+      
+      // Manejar errores específicos
+      if (response.status === 400) {
+        if (errorMessage.includes("email")) {
+          throw new Error("Este email ya está registrado");
+        }
+        throw new Error("Datos de registro incorrectos");
+      }
+      
+      throw new Error("Error al registrar usuario");
+    }
+
+    const data = await response.json();
+    
+    // Verificar que la respuesta contiene el token
+    if (!data.token) {
+      throw new Error("Respuesta del servidor incompleta");
+    }
+    
+    // Guardar información del nuevo usuario
+    const newUser = {
+      id: data.user?.id || extractUserIdFromToken(data.token),
+      nombre: nombre,
+      email: email,
+      isGuest: false
+    };
+    
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("usuario", JSON.stringify(newUser));
+    setCurrentUser(newUser);
+    
+    return newUser;
+  } catch (error) {
+    console.error("Error en registro:", error);
+    throw error;
+  }
+};
 
   const loginAsGuest = () => {
     const guestData = {

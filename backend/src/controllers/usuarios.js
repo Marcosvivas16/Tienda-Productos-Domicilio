@@ -28,16 +28,36 @@ export class UsuarioController {
   }
 
   register = async (req, res) => {
+    // Añadir esto para depuración
+    console.log('Datos recibidos en register:', req.body);
+    
     const result = validateUsuario(req.body)
 
     if (!result.success) {
+      // Mostrar errores detallados
+      console.log('Error de validación:', JSON.parse(result.error.message));
       return res.status(400).json({ error: JSON.parse(result.error.message) })
     }
 
     try {
       const nuevoUsuario = await this.usuarioModel.register({ input: result.data })
-      res.send({ id: nuevoUsuario.id, email: nuevoUsuario.email })
+      
+      // Generar token después de registro exitoso
+      const token = jwt.sign(
+        { user: { id: nuevoUsuario.id, email: nuevoUsuario.email, nombre: nuevoUsuario.nombre } },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d'}
+      )
+      
+      // Devolver token y usuario completo (sin password)
+      const { password, ...usuarioSinPassword } = nuevoUsuario;
+      
+      res.status(201).json({
+        user: usuarioSinPassword,
+        token
+      })
     } catch (error) {
+      console.error('Error en registro:', error);
       res.status(400).json({ error: error.message })
     }
   }
@@ -110,7 +130,6 @@ export class UsuarioController {
     }
   }
   
-
   protected = async (req, res) => {
     const { user } = req
 
@@ -129,6 +148,5 @@ export class UsuarioController {
     } catch (error) {
       res.status(500).json({ message: "Error interno del servidor" })
     }
-
   }
 }

@@ -10,10 +10,12 @@ const Registro = () => {
     password: "",
     confirmPassword: ""
   });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  // Reemplazar el estado error por errors (objeto para múltiples errores)
+  const [errors, setErrors] = useState({});
+  // Reemplazar loading por isSubmitting para mantener consistencia
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { register, login } = useAuth(); // también importamos login
+  const { register } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,36 +25,62 @@ const Registro = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    if (formData.password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres");
-      return;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setErrors({});
+    
+    // Validaciones en el frontend
+    let hasErrors = false;
+    const newErrors = {};
+    
+    if (!formData.nombre) {
+      newErrors.nombre = "El nombre es obligatorio";
+      hasErrors = true;
     }
-
+    
+    if (!formData.email) {
+      newErrors.email = "El email es obligatorio";
+      hasErrors = true;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email no válido";
+      hasErrors = true;
+    }
+    
+    if (!formData.password) {
+      newErrors.password = "La contraseña es obligatoria";
+      hasErrors = true;
+    } else if (formData.password.length < 6) {
+      newErrors.password = "La contraseña debe tener al menos 6 caracteres";
+      hasErrors = true;
+    }
+    
     if (formData.password !== formData.confirmPassword) {
-      setError("Las contraseñas no coinciden");
+      newErrors.confirmPassword = "Las contraseñas no coinciden";
+      hasErrors = true;
+    }
+    
+    if (hasErrors) {
+      setErrors(newErrors);
       return;
     }
-
-    setLoading(true);
-
+    
+    setIsSubmitting(true);
+    
     try {
-      // Registro del usuario
-      await register(formData.nombre, formData.email, formData.password);
+      // Enviar solo los campos necesarios
+      await register(
+        formData.nombre.trim(), 
+        formData.email.trim().toLowerCase(), 
+        formData.password
+      );
       
-      // Login automático tras registro
-      await login(formData.email, formData.password);
-
-      // Redirigir a la página de perfil (o inicio)
-      navigate("/perfil");
-    } catch (err) {
-      console.error("Error de registro:", err);
-      setError(err.message || "Error al registrar usuario. Intenta con otro email.");
+      // Redirigir tras registro exitoso
+      navigate("/");
+    } catch (error) {
+      console.error("Error de registro:", error);
+      setErrors({ general: error.message || "Error al registrar usuario" });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -64,7 +92,8 @@ const Registro = () => {
           <p>¡Únete a FastDelivery y disfruta de todos los beneficios!</p>
         </div>
 
-        {error && <div className="registro-error">{error}</div>}
+        {/* Mostrar error general si existe */}
+        {errors.general && <div className="registro-error">{errors.general}</div>}
 
         <form onSubmit={handleSubmit} className="registro-form">
           <div className="form-group">
@@ -78,6 +107,7 @@ const Registro = () => {
               required
               placeholder="Tu nombre completo"
             />
+            {errors.nombre && <div className="error-message">{errors.nombre}</div>}
           </div>
 
           <div className="form-group">
@@ -91,6 +121,7 @@ const Registro = () => {
               required
               placeholder="tu@email.com"
             />
+            {errors.email && <div className="error-message">{errors.email}</div>}
           </div>
 
           <div className="form-group">
@@ -104,6 +135,7 @@ const Registro = () => {
               required
               placeholder="Mínimo 6 caracteres"
             />
+            {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
 
           <div className="form-group">
@@ -117,6 +149,7 @@ const Registro = () => {
               required
               placeholder="Repite tu contraseña"
             />
+            {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
           </div>
 
           <div className="terms-privacy">
@@ -129,9 +162,9 @@ const Registro = () => {
           <button
             type="submit"
             className="btn-registro"
-            disabled={loading}
+            disabled={isSubmitting}
           >
-            {loading ? "Creando cuenta..." : "Crear Cuenta"}
+            {isSubmitting ? "Creando cuenta..." : "Crear Cuenta"}
           </button>
         </form>
 
