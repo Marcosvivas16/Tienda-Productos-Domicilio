@@ -320,13 +320,41 @@ export const guardarPedido = async (pedido) => {
   }
 };
 
-export const obtenerPedidos = async (userId) => {
+export const obtenerPedidos = async (userId, token) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/pedidos?userId=${userId}`);
-    if (!response.ok) throw new Error("Error al obtener pedidos");
-    return await response.json();
+    if (!userId || !token) {
+      console.error("Se requiere ID de usuario y token para obtener pedidos");
+      return [];
+    }
+
+    const response = await fetch(`${API_BASE_URL}/pedidos/usuario/${userId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    // Si no hay pedidos, devolver array vacío en lugar de datos de ejemplo
+    if (response.status === 404) {
+      console.log("No se encontraron pedidos para el usuario");
+      return [];
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status} al obtener pedidos`);
+    }
+
+    const pedidos = await response.json();
+    
+    // Verificar que sea un array y que realmente pertenezca al usuario
+    if (!Array.isArray(pedidos)) {
+      console.warn("Formato de respuesta inesperado para pedidos");
+      return [];
+    }
+    
+    // Filtrar solo los pedidos que pertenecen al usuario actual
+    return pedidos.filter(pedido => pedido.usuario_id === userId || pedido.userId === userId);
   } catch (error) {
-    console.error("Error al cargar historial de pedidos:", error);
+    console.error("Error al obtener pedidos:", error);
     return [];
   }
 };

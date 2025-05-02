@@ -44,7 +44,8 @@ POST http://155.210.71.196:1234/usuarios/register
 Content-Type: application/json
 
 {
-  "email": "m@example.com",
+  "nombre": "Nuevo Usuario",
+  "email": "b@b.com",
   "password": "1234567"
 }
 
