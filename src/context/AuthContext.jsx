@@ -1,8 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { obtenerUsuario, iniciarSesion, logout as apiLogout } from "../services/api";
+import { syncFullCart } from "../services/api";
 
 const AuthContext = createContext();
-
+const API_BASE_URL = "http://155.210.71.196:1234";
 export const useAuth = () => {
   return useContext(AuthContext);
 };
@@ -24,37 +25,91 @@ export const AuthProvider = ({ children }) => {
     checkLoggedIn();
   }, []);
 
-  const login = async (email, password) => {
+  const logout = async () => {
     try {
-      const response = await iniciarSesion(email, password);
-      console.log("Respuesta completa de login:", response);
-      
-      // Validación más estricta: requerimos explícitamente user.id y token
-      if (!response || !response.user || !response.user.id || !response.token) {
-        console.error("Respuesta de login inválida:", response);
-        throw new Error("Los datos de autenticación son incorrectos");
+      // Si hay usuario autenticado, intentar sincronizar el carrito
+      if (currentUser && currentUser.id && isAuthenticated()) {
+        const token = localStorage.getItem('token');
+        const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        
+        // Sincronizar con carrito vacío para limpiar
+        await syncFullCart(currentUser.id, token, []);
       }
-      
-      // Crear objeto con estructura consistente
-      const userWithId = {
-        ...response.user,
-        id: response.user.id,
-        nombre: response.user.nombre || email.split('@')[0], // Asegurar que tenga nombre
-        token: response.token,
-        isAuthenticated: true,
-        isGuest: false
-      };
-      
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("usuario", JSON.stringify(userWithId));
-      setCurrentUser(userWithId);
-      
-      return userWithId;
     } catch (error) {
-      console.error("Error en login:", error);
-      throw error; // Asegurarse de que el error se propague hacia arriba
+      console.error("Error al sincronizar durante logout:", error);
+    } finally {
+      // Continuar con el proceso normal de logout
+      localStorage.removeItem("usuario");
+      localStorage.removeItem("token");
+      setCurrentUser(null);
     }
   };
+  
+const login = async (email, password) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/usuarios/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Credenciales incorrectas");
+    }
+
+    const data = await response.json();
+    console.log("Respuesta completa de login:", data);
+    
+    // Verificar estructura de la respuesta
+    if (!data.token) {
+      throw new Error("Respuesta de login inválida");
+    }
+    
+    // Obtener información del usuario desde el token o la respuesta
+    const userId = data.user?.id || extractUserIdFromToken(data.token);
+    
+    // Crear objeto de usuario
+    const userWithId = {
+      id: userId,
+      email: email,
+      nombre: data.user?.nombre || email.split('@')[0],
+      token: data.token,
+      isAuthenticated: true,
+      isGuest: false
+    };
+    
+    // Guardar token y datos de usuario
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("usuario", JSON.stringify(userWithId));
+    setCurrentUser(userWithId);
+    
+    return userWithId;
+  } catch (error) {
+    console.error("Error en login:", error);
+    throw error;
+  }
+};
+
+// Función para extraer el ID del usuario desde un token JWT
+function extractUserIdFromToken(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    
+    const payload = JSON.parse(jsonPayload);
+    
+    // Dependiendo de cómo el backend estructure el token:
+    return payload.userId || payload.sub || payload.user?.id;
+  } catch (e) {
+    console.error("Error decodificando token:", e);
+    return null;
+  }
+}
 
 
   const register = async (nombre, email, password) => {
@@ -123,13 +178,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("usuario", JSON.stringify(guestData));
     setCurrentUser(guestData);
     return guestData;
-  };
-
-  const logout = () => {
-    apiLogout();
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("token");
-    setCurrentUser(null);
   };
 
   const isGuest = () => {
