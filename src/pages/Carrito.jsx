@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";  // Importar useState para manejar isProcessing
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
@@ -7,8 +7,9 @@ import { guardarPedido } from "../services/api"; // función que envia el pedido
 
 const Carrito = () => {
   const { isAuthenticated, isGuest, currentUser } = useAuth();
-  const { cartItems, removeFromCart, updateQuantity, getTotal } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, getTotal, clearCart } = useCart(); // Añadir clearCart aquí
   const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false); // Definir el estado isProcessing
 
   const formatPrice = (price) => {
     const numericPrice = parseFloat(price);
@@ -16,18 +17,31 @@ const Carrito = () => {
   };
 
   const handleCheckout = async () => {
-    if (!isAuthenticated()) {
-      navigate("/login");
-      return;
-    }
-
     try {
-      await guardarPedido(currentUser.id, cartItems);
-      alert("Pedido enviado correctamente.");
+      // Verificar token vigente antes de procesar
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+        navigate("/login");
+        return;
+      }
+  
+      // Mostrar un mensaje de proceso
+      setIsProcessing(true); // Ahora está definido correctamente
+      
+      // Procesar pedido con la función modificada
+      await guardarPedido(currentUser.id, cartItems, token);
+      
+      // Limpiar carrito después de compra exitosa
+      clearCart(); // Ahora está definido correctamente
+      
+      // Navegar a la página de checkout
       navigate("/checkout");
     } catch (error) {
       console.error("Error al guardar pedido:", error);
-      alert("Hubo un error al procesar el pedido.");
+      alert("Hubo un error al procesar el pedido. Inténtalo nuevamente.");
+    } finally {
+      setIsProcessing(false); // Ahora está definido correctamente
     }
   };
 

@@ -301,17 +301,46 @@ export const syncFullCart = async (userId, token, items) => {
 
 // ---------------------- PEDIDOS ------------------------
 
-export const guardarPedido = async (pedido) => {
+export const guardarPedido = async (userId, cartItems, token) => {
   try {
+    if (!userId || !token || !cartItems || cartItems.length === 0) {
+      console.error("Se requieren datos de usuario, token y productos para crear un pedido");
+      throw new Error("Datos de pedido incompletos");
+    }
+
+    // Formatear los datos según espera el backend
+    const pedidoData = {
+      usuario_id: userId,
+      productos: cartItems.map(item => ({
+        producto_id: item.id,
+        cantidad: item.quantity,
+        precio: item.precio
+      })),
+      direccion_entrega: {
+        calle: "Dirección de entrega", // Estos datos podrían venir de un formulario
+        ciudad: "Ciudad",
+        codigo_postal: "12345"
+      },
+      estado: "Pendiente"
+    };
+
+    console.log("Enviando pedido:", JSON.stringify(pedidoData, null, 2));
+
     const response = await fetch(`${API_BASE_URL}/pedidos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` // Añadir token para autenticación
       },
-      body: JSON.stringify(pedido),
+      body: JSON.stringify(pedidoData),
     });
 
-    if (!response.ok) throw new Error("Error al guardar el pedido");
+    // Manejar respuesta no exitosa
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Error ${response.status} al guardar pedido: ${errorText}`);
+      throw new Error(`Error al guardar el pedido: ${response.status}`);
+    }
 
     return await response.json();
   } catch (error) {
