@@ -197,7 +197,7 @@ export const getCart = async (userId, token) => {
         nombre: item.nombre || "Producto",
         precio: item.precio || 0,
         quantity: item.cantidad || 1,
-        imagen: item.imagen || "/default-product.jpg"
+        imagen: item.url_imagen
       }));
     }
     
