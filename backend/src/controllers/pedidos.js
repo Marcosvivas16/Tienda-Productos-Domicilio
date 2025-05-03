@@ -19,9 +19,8 @@ export class PedidoController {
   }
 
   getByUsuario = async (req, res) => {
-    const { usuarioId } = req.params
-    const pedidos = await this.pedidoModel.getByUsuario({ usuarioId })
-
+    const { id } = req.params
+    const pedidos = await this.pedidoModel.getByUsuario({ usuarioId: id })
     res.json(pedidos)
   }
 
