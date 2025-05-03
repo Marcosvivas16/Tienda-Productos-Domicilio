@@ -71,6 +71,11 @@ export class UsuarioController {
 
     try {
       const usuario = await this.usuarioModel.login({ input: result.data })
+
+      if (!usuario) {
+        return res.status(401).json({ error: "Credenciales incorrectas" });
+      }
+
       const token = jwt.sign(
         { user: usuario },
         process.env.JWT_SECRET,
