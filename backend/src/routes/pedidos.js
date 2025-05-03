@@ -13,7 +13,7 @@ export const createPedidoRouter = ({ pedidoModel }) => {
     pedidosRouter.post("/", pedidoController.create);
 
     // Obtener pedidos por ID de usuario (para mostrar historial)
-    pedidosRouter.get("/usuario/:id", pedidoController.getByUserId);
+    pedidosRouter.get("/usuario/:id", pedidoController.getByUsuario);
 
     return pedidosRouter;
 };
