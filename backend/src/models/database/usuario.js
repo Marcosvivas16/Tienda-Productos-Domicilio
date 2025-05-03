@@ -68,9 +68,9 @@ export class UsuarioModel {
         return {
             id: usuarios[0].id,
             email: usuarios[0].email,
-            nombre: nombre[0].nombre,
-            telefono: telefono[0].telefono,
-            direccion: direccion[0].direccion
+            nombre: usuarios[0].nombre,
+            telefono: usuarios[0].telefono,
+            direccion: usuarios[0].direccion
           };
         
 	}
