@@ -1,12 +1,14 @@
 import { createApp } from './app.js'
 import { ProductoModel } from './models/local-file-system/producto.js'
 import { UsuarioModel } from './models/local-file-system/usuario.js'
-import { CarritoModel } from './models/local-file-system/carrito.js' // << AÑADIDO
+import { CarritoModel } from './models/local-file-system/carrito.js' 
+import { PedidoModel } from './models/local-file-system/pedido.js' // << AÑADIDO
 
 const app = createApp({
   productoModel: ProductoModel,
   usuarioModel: UsuarioModel,
-  carritoModel: CarritoModel // << AÑADIDO
+  carritoModel: CarritoModel,
+  pedidoModel: PedidoModel // << AÑADIDO
 })
 
 const PORT = process.env.PORT ?? 1234

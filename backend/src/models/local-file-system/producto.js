@@ -1,78 +1,61 @@
 import { randomUUID } from 'node:crypto'
-import { readJSON, writeJSON } from '../../utils.js' 
+import { readJSON, writeJSON, resolvePath } from '../../utils.js'
 
-const productos = await readJSON('../local-data/productos.json')
-const categorias = await readJSON('../local-data/categorias.json')
+const FILE_PRODUCTOS = resolvePath('local-data/productos.json')
+const FILE_CATEGORIAS = resolvePath('local-data/categorias.json')
 
 export class ProductoModel {
-	static async getAll ({ categoria }) {
-		if (categoria) {
-			const categoriaExistente = categorias.find(c => 
-				c.nombre.toLowerCase() === categoria.toLowerCase()
-			)
-			if (!categoriaExistente) return false
-			
-			return productos.filter(
-				producto => producto.categoria_id === categoriaExistente.id
-			)
-		}
-	
-		return productos
-	}
-      
-	static async getById ({ id }) {
-		const producto = productos.find(producto => producto.id === id)
-		
-		return producto	
-	}
-    
-	static async create ({ input }) {
-		const { categoria, ...restoInput } = input
-	
-		const categoriaExistente = categorias.find(c => 
-			c.nombre.toLowerCase() === categoria.toLowerCase()
-		)
-	
-		if (!categoriaExistente) {
-			throw new Error('Categoría no encontrada')
-		}
-	
-		const nuevoProducto = {
-			id: randomUUID(),
-			...restoInput,
-			categoria_id: categoriaExistente.id
-		}
-	
-		productos.push(nuevoProducto)
-		await writeJSON('local-data/productos.json', productos) 
-	
-		return nuevoProducto
-	}
-	
-	static async delete ({ id }) {
-		const indiceProducto = productos.findIndex(producto => producto.id === id)
+  static async getAll({ categoria }) {
+    const productos = await readJSON(FILE_PRODUCTOS)
+    if (!categoria) return productos
 
-		if (indiceProducto === -1) {
-			return false
-		}
+    const categorias = await readJSON(FILE_CATEGORIAS)
+    const cat = categorias.find(c => c.nombre.toLowerCase() === categoria.toLowerCase())
+    if (!cat) return []
 
-		productos.splice(indiceProducto, 1)
-		await writeJSON('local-data/productos.json', productos)
-		return true        
-	}
-    
-	static async update ({ id, input }) {
-		const indiceProducto = productos.findIndex(producto => producto.id === id)
-		if (indiceProducto === -1) {
-			return false
-		}
+    return productos.filter(p => p.categoria_id === cat.id)
+  }
 
-		productos[indiceProducto] = {
-			...productos[indiceProducto],
-			...input
-		}
-		await writeJSON('local-data/productos.json', productos)
-		
-		return productos[indiceProducto]
-	}
+  static async getById({ id }) {
+    const productos = await readJSON(FILE_PRODUCTOS)
+    return productos.find(p => p.id === id)
+  }
+
+  static async create({ input }) {
+    const productos = await readJSON(FILE_PRODUCTOS)
+    const categorias = await readJSON(FILE_CATEGORIAS)
+
+    const cat = categorias.find(c => c.nombre.toLowerCase() === input.categoria.toLowerCase())
+    if (!cat) throw new Error('Categoría no encontrada')
+
+    const nuevo = {
+      id: randomUUID(),
+      ...input,
+      categoria_id: cat.id
+    }
+
+    productos.push(nuevo)
+    await writeJSON(FILE_PRODUCTOS, productos)
+    return nuevo
+  }
+
+  static async delete({ id }) {
+    const productos = await readJSON(FILE_PRODUCTOS)
+    const index = productos.findIndex(p => p.id === id)
+    if (index === -1) return false
+
+    productos.splice(index, 1)
+    await writeJSON(FILE_PRODUCTOS, productos)
+    return true
+  }
+
+  static async update({ id, input }) {
+    const productos = await readJSON(FILE_PRODUCTOS)
+    const index = productos.findIndex(p => p.id === id)
+    if (index === -1) return false
+
+    productos[index] = { ...productos[index], ...input }
+    await writeJSON(FILE_PRODUCTOS, productos)
+    return productos[index]
+  }
 }

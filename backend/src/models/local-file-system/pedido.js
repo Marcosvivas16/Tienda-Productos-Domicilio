@@ -1,46 +1,60 @@
-import { randomUUID } from 'node:crypto';
-import { readJSON, writeJSON } from '../../utils.js';
+import { randomUUID } from 'node:crypto'
+import path from 'node:path'
+import { readJSON, writeJSON, resolvePath } from '../../utils.js'
+import { fileURLToPath } from 'node:url'
 
-const pedidos = await readJSON('../local-data/pedidos.json');
+// Solución robusta para obtener la ruta absoluta del archivo actual
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Ruta completa y segura a pedidos.json
+const FILE_PATH = resolvePath('local-data/pedidos.json')
 
 export class PedidoModel {
-  static async getAll({ usuarioId }) {
-    return pedidos.filter(pedido => pedido.usuario_id === usuarioId);
+  static async getAll () {
+    const pedidos = await readJSON(FILE_PATH)
+    return pedidos
   }
 
-  static async getById({ id }) {
-    return pedidos.find(pedido => pedido.id === id) || null;
+  static async getById ({ id }) {
+    const pedidos = await readJSON(FILE_PATH)
+    const pedido = pedidos.find(p => p.id === id)
+    return pedido ?? null
   }
 
-  static async create({ input }) {
+  static async getByUsuario ({ usuarioId }) {
+    const pedidos = await readJSON(FILE_PATH)
+    return pedidos
+      .filter(p => p.usuario_id === usuarioId)
+      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+  }
+
+  static async create ({ input }) {
+    const pedidos = await readJSON(FILE_PATH)
+
     const nuevoPedido = {
       id: randomUUID(),
-      ...input,
-      fecha: new Date().toISOString()
-    };
-    pedidos.push(nuevoPedido);
-    await writeJSON('local-data/pedidos.json', pedidos);
-    return nuevoPedido;
+      usuario_id: input.usuario_id,
+      fecha: new Date().toISOString(),
+      estado: 'pendiente',
+      total: input.productos.reduce((acc, p) => acc + p.precio * p.quantity, 0),
+      productos: input.productos
+    }
+
+    pedidos.push(nuevoPedido)
+    await writeJSON(FILE_PATH, pedidos)
+
+    return nuevoPedido
   }
 
-  static async update({ id, input }) {
-    const index = pedidos.findIndex(pedido => pedido.id === id);
-    if (index === -1) return null;
+  static async delete ({ id }) {
+    const pedidos = await readJSON(FILE_PATH)
+    const index = pedidos.findIndex(p => p.id === id)
+    if (index === -1) return false
 
-    pedidos[index] = {
-      ...pedidos[index],
-      ...input,
-    };
-    await writeJSON('local-data/pedidos.json', pedidos);
-    return pedidos[index];
-  }
+    pedidos.splice(index, 1)
+    await writeJSON(FILE_PATH, pedidos)
 
-  static async delete({ id }) {
-    const index = pedidos.findIndex(pedido => pedido.id === id);
-    if (index === -1) return false;
-
-    pedidos.splice(index, 1);
-    await writeJSON('local-data/pedidos.json', pedidos);
-    return true;
+    return true
   }
 }
