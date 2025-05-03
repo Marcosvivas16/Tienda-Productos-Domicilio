@@ -6,7 +6,7 @@
   "scripts": {
     "start:local": "node --watch src/server-with-local.js",
     "start:db": "node --watch src/server-with-db.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --extension js"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +22,9 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
-    "standard": "^17.1.2"
+    "chai": "^5.2.0",
+    "mocha": "^11.2.2",
+    "standard": "^17.1.2",
+    "supertest": "^7.1.0"
   }
 }
