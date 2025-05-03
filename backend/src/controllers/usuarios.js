@@ -1,4 +1,4 @@
-import { validatePartialUsuario, validateRegistro } from '../schemes/usuarios.js'
+import { validatePartialUsuario, validateRegistro, validateLogin } from '../schemes/usuarios.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
@@ -28,34 +28,28 @@ export class UsuarioController {
   }
 
   register = async (req, res) => {
-    // Añadir esto para depuración
-    console.log('Datos recibidos en register:', req.body);
-    
     const result = validateRegistro(req.body)
 
     if (!result.success) {
-      // Mostrar errores detallados
-      console.log('Error de validación:', JSON.parse(result.error.message));
       return res.status(400).json({ error: JSON.parse(result.error.message) })
     }
 
     try {
       const nuevoUsuario = await this.usuarioModel.register({ input: result.data })
       
-      // Generar token después de registro exitoso
       const token = jwt.sign(
-        { user: { id: nuevoUsuario.id, email: nuevoUsuario.email, nombre: nuevoUsuario.nombre } },
+        { user: nuevoUsuario },
         process.env.JWT_SECRET,
         { expiresIn: '1d'}
       )
-      
-      // Devolver token y usuario completo (sin password)
-      const { password, ...usuarioSinPassword } = nuevoUsuario;
-      
-      res.status(201).json({
-        user: usuarioSinPassword,
-        token
-      })
+
+      const cookieOption = {
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
+        path: "/"
+      }
+      res
+      .cookie("access_token",token,cookieOption)
+      .send({ user: usuario, token })
     } catch (error) {
       console.error('Error en registro:', error);
       res.status(400).json({ error: error.message })

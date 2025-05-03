@@ -20,14 +20,14 @@ const connection = await mysql.createConnection(config)
 export class UsuarioModel {
     static async getAll () {
         const [usuarios] = await connection.query(
-            'SELECT BIN_TO_UUID(id) AS id, email FROM usuario;'
+            'SELECT BIN_TO_UUID(id) AS id, email, nombre, telefono, direccion FROM usuario;'
         )
         return usuarios
     }
 
     static async getById ({ id }) {
 		const [usuarios] = await connection.query(
-			`SELECT BIN_TO_UUID(id) AS id, email
+			`SELECT BIN_TO_UUID(id) AS id, email, nombre, telefono, direccion
 				FROM usuario WHERE id = UUID_TO_BIN(?);`,
 			[id]
 		)
@@ -38,7 +38,7 @@ export class UsuarioModel {
 	}
 
     static async register ({ input }) {
-        const { email, password } = input
+        const { email, password, nombre, telefono, direccion } = input
 
         const [lineas] = await connection.query('SELECT id FROM usuario WHERE email = ?', [email])
         if (lineas.length > 0) {
@@ -52,9 +52,9 @@ export class UsuarioModel {
 
         try {
             await connection.query(
-                `INSERT INTO usuario (id, email, password)
-                    VALUES (UUID_TO_BIN(?),?, ?);`,
-                  [uuid, email, hashedPassword]
+                `INSERT INTO usuario (id, email, password, nombre, telefono, direccion)
+                    VALUES (UUID_TO_BIN(?),?, ?, ?, ?, ?);`,
+                  [uuid, email, hashedPassword, nombre, telefono, direccion]
             )
         } catch (e) {
             throw new Error('Error creando el usuario')
@@ -67,7 +67,10 @@ export class UsuarioModel {
 
         return {
             id: usuarios[0].id,
-            email: usuarios[0].email
+            email: usuarios[0].email,
+            nombre: nombre[0].nombre,
+            telefono: telefono[0].telefono,
+            direccion: direccion[0].direccion
           };
         
 	}
@@ -76,7 +79,7 @@ export class UsuarioModel {
         const { email, password } = input
 
         const [[user]] = await connection.query(
-            `SELECT BIN_TO_UUID(id) AS id, email, password FROM usuario WHERE email = ?`,
+            `SELECT BIN_TO_UUID(id) AS id, email, password, nombre, telefono, direccion FROM usuario WHERE email = ?`,
             [email]
         );
 
@@ -87,7 +90,10 @@ export class UsuarioModel {
 
         return {
             id: user.id,
-            email: user.email
+            email: user.email,
+            nombre: user.nombre,
+            telefono: user.telefono,
+            direccion: user.direccion
           };
         
     }
@@ -128,7 +134,7 @@ export class UsuarioModel {
 
     static async protected({id}) {
         const [[user]] = await connection.query(
-          `SELECT BIN_TO_UUID(id) AS id, email FROM usuario WHERE id = UUID_TO_BIN(?)`,
+          `SELECT BIN_TO_UUID(id) AS id, email, nombre, telefono, direccion FROM usuario WHERE id = UUID_TO_BIN(?)`,
           [id]
         )      
         
@@ -136,7 +142,10 @@ export class UsuarioModel {
 
         return {
             id: user.id,
-            email: user.email
+            email: user.email,
+            nombre: user.nombre,
+            telefono: user.telefono,
+            direccion: user.direccion
           };
     }
 }
