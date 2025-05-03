@@ -49,7 +49,7 @@ export class UsuarioController {
       }
       res
       .cookie("access_token",token,cookieOption)
-      .send({ user: usuario, token })
+      .send({ user: nuevoUsuario, token })
     } catch (error) {
       console.error('Error en registro:', error);
       res.status(400).json({ error: error.message })
