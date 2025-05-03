@@ -74,7 +74,11 @@ const ListaProductos = ({ productos, agregarAlCarrito }) => {
               <img 
                 src={producto.imagen} 
                 alt={producto.nombre} 
-                className="producto-imagen" 
+                className="producto-imagen"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/placeholder-producto.jpg";
+                }}
               />
               {hoveredProduct === producto.id && (
                 <div className="producto-acciones">
