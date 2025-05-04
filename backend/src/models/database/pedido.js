@@ -47,7 +47,21 @@ export class PedidoModel {
   static async create ({ input }) {
     const { usuario_id, direccion, productos } = input
 
-    const total = productos.reduce((acc, p) => acc + p.precio * p.quantity, 0)
+    let total = 0
+
+    for (const producto of productos) {
+      const [result] = await connection.query(
+        'SELECT precio FROM producto WHERE id = UUID_TO_BIN(?)',
+        [producto.id]
+      )
+
+      if (result.length === 0) {
+        throw new Error(`Producto con ID ${producto.id} no encontrado`)
+      }
+
+      const precioUnitario = result[0].precio
+      total += precioUnitario * producto.cantidad
+}
     const fecha = new Date()
 
     // Insertar el pedido
