@@ -304,20 +304,15 @@ export const guardarPedido = async (userId, cartItems, token) => {
       throw new Error("Datos de pedido incompletos");
     }
 
-    // Formatear los datos según espera el backend
+    // Formatear los datos EXACTAMENTE como espera el backend
     const pedidoData = {
       usuario_id: userId,
       productos: cartItems.map(item => ({
-        producto_id: item.id,
-        cantidad: item.quantity,
-        precio: item.precio
-      })),
-      direccion_entrega: {
-        calle: "Dirección de entrega", // Estos datos podrían venir de un formulario
-        ciudad: "Ciudad",
-        codigo_postal: "12345"
-      },
-      estado: "Pendiente"
+        id: item.id, // Cambiado de producto_id a id
+        cantidad: item.quantity || 1
+        // Eliminados precio y otros campos que no espera el backend
+      }))
+      // Eliminados campos direccion_entrega y estado que no espera el backend
     };
 
     console.log("Enviando pedido:", JSON.stringify(pedidoData, null, 2));
@@ -326,7 +321,7 @@ export const guardarPedido = async (userId, cartItems, token) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}` // Añadir token para autenticación
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(pedidoData),
     });
@@ -358,26 +353,35 @@ export const obtenerPedidos = async (userId, token) => {
       }
     });
 
-    // Si no hay pedidos, devolver array vacío en lugar de datos de ejemplo
+    // Si no hay pedidos, devolver array vacío
     if (response.status === 404) {
       console.log("No se encontraron pedidos para el usuario");
       return [];
     }
 
     if (!response.ok) {
-      throw new Error(`Error ${response.status} al obtener pedidos`);
-    }
-
-    const pedidos = await response.json();
-    
-    // Verificar que sea un array y que realmente pertenezca al usuario
-    if (!Array.isArray(pedidos)) {
-      console.warn("Formato de respuesta inesperado para pedidos");
+      console.error(`Error ${response.status} al obtener pedidos`);
       return [];
     }
+
+    // Obtener los pedidos del servidor
+    const pedidos = await response.json();
     
-    // Filtrar solo los pedidos que pertenecen al usuario actual
-    return pedidos.filter(pedido => pedido.usuario_id === userId || pedido.userId === userId);
+    // Verificar que sea un array
+    if (!Array.isArray(pedidos)) {
+      console.warn("Formato de respuesta inesperado para pedidos, no es un array:", pedidos);
+      return [];
+    }
+
+    // Normalizar estructura para garantizar consistencia
+    return pedidos.map(pedido => ({
+      id: pedido.id || pedido._id || pedido.pedido_id || '',
+      fecha: pedido.fecha || new Date().toISOString(),
+      estado: pedido.estado || 'Pendiente',
+      productos: Array.isArray(pedido.productos) ? pedido.productos : [],
+      total: pedido.total || 0,
+      usuario_id: pedido.usuario_id || userId
+    }));
   } catch (error) {
     console.error("Error al obtener pedidos:", error);
     return [];
