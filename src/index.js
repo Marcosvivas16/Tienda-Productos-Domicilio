@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';

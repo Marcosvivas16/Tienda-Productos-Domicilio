@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { obtenerPedidos } from '../services/api';

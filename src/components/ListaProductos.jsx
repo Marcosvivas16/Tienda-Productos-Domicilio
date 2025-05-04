@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import React, { useState, useMemo } from "react";
 import VistaRapida from "./VistaRapida";
 import "../styles/ListaProductos.css";

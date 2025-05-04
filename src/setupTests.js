@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import '@testing-library/jest-dom';
 
 // Cualquier configuración adicional que necesites

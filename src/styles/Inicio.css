@@ -1,10 +1,14 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 .inicio-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-/* Hero Section - Animada con parallax */
 .hero-section {
   position: relative;
   height: 500px;
@@ -211,28 +215,6 @@
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
 }
 
-/* Script para efecto 3D en categorías */
-/* Añadir en un script separado, esto solo para referencia */
-/* 
-document.querySelectorAll('.categoria-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const xRotation = ((y - rect.height / 2) / 10) * -1;
-    const yRotation = (x - rect.width / 2) / 10;
-    
-    card.style.transform = `perspective(1000px) scale(1.08) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
-  });
-  
-  card.addEventListener('mouseout', () => {
-    card.style.transform = 'perspective(1000px) scale(1) rotateX(0) rotateY(0)';
-  });
-});
-*/
-
-/* Promociones - Diseño mejorado con efectos */
 .promociones-section {
   margin-bottom: 60px;
 }

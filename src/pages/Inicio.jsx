@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Inicio.css";

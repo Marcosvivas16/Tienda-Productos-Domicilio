@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 const API_BASE_URL = "http://155.210.71.196:1234";
 
 // Categorías

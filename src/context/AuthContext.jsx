@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { obtenerUsuario, iniciarSesion, logout as apiLogout } from "../services/api";
 import { syncFullCart } from "../services/api";

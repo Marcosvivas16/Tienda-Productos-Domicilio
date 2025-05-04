@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import ListaProductos from "../components/ListaProductos";

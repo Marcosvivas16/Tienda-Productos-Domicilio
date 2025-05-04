@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import React, { useState } from "react";  // Importar useState para manejar isProcessing
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";

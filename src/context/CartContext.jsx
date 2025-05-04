@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Marcos Vivas
+ */
 import React, { createContext, useState, useEffect, useContext, useRef } from "react";
 import { useAuth } from "./AuthContext";
 import { getCart, saveCart, removeCartItem } from "../services/api";
