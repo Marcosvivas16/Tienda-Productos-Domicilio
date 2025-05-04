@@ -13,7 +13,7 @@ const DetalleProducto = () => {
   const { addToCart } = useCart();
   const [cantidad, setCantidad] = useState(1);
   
-  // Producto estático para desarrollo - Tu compañero reemplazará esto
+  // Para pruebas sin backend
   const producto = {
     id: parseInt(id),
     nombre: "Producto de Ejemplo",
@@ -175,7 +175,6 @@ const DetalleProducto = () => {
       <div className="productos-relacionados">
         <h2>Productos Relacionados</h2>
         <div className="productos-relacionados-grid">
-          {/* Aquí irían los productos relacionados */}
           <div className="placeholder-mensaje">
             Los productos relacionados aparecerán aquí
           </div>

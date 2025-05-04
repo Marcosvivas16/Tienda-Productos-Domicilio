@@ -17,7 +17,6 @@ import imgBebidas from "../components/img/categorias/bebidas.jpg";
 const Inicio = () => {
   return (
     <div className="inicio-container">
-      {/* Hero Banner */}
       <div className="hero-section">
         <div className="hero-content">
           <h1>Productos frescos a tu puerta</h1>

@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar si hay usuario en localStorage al cargar la app
     const checkLoggedIn = () => {
       const userData = localStorage.getItem("usuario");
       if (userData) {
@@ -31,11 +30,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
-      // Importante: NO intentamos sincronizar con el servidor durante el logout
-      // Solo limpiamos localStorage y el estado
       localStorage.removeItem("usuario");
       localStorage.removeItem("token");
-      localStorage.removeItem("cartItems"); // Limpiar carrito local también
+      localStorage.removeItem("cartItems"); 
       setCurrentUser(null);
   };
   
@@ -56,15 +53,12 @@ const login = async (email, password) => {
     const data = await response.json();
     console.log("Respuesta completa de login:", data);
     
-    // Verificar estructura de la respuesta
     if (!data.token) {
       throw new Error("Respuesta de login inválida");
     }
     
-    // Obtener información del usuario desde el token o la respuesta
     const userId = data.user?.id || extractUserIdFromToken(data.token);
     
-    // Crear objeto de usuario
     const userWithId = {
       id: userId,
       email: email,
@@ -74,7 +68,6 @@ const login = async (email, password) => {
       isGuest: false
     };
     
-    // Guardar token y datos de usuario
     localStorage.setItem("token", data.token);
     localStorage.setItem("usuario", JSON.stringify(userWithId));
     setCurrentUser(userWithId);
@@ -86,7 +79,6 @@ const login = async (email, password) => {
   }
 };
 
-// Función para extraer el ID del usuario desde un token JWT
 function extractUserIdFromToken(token) {
   try {
     const base64Url = token.split('.')[1];
@@ -97,7 +89,6 @@ function extractUserIdFromToken(token) {
     
     const payload = JSON.parse(jsonPayload);
     
-    // Dependiendo de cómo el backend estructure el token:
     return payload.userId || payload.sub || payload.user?.id;
   } catch (e) {
     console.error("Error decodificando token:", e);
@@ -108,27 +99,22 @@ function extractUserIdFromToken(token) {
 
 const register = async (nombre, email, password) => {
   try {
-    // Verificar que los datos estén completos
     if (!nombre || !email || !password) {
       throw new Error("Todos los campos son obligatorios");
     }
 
-    // Asegurarse de que el email tenga formato correcto
     if (!email.includes('@') || !email.includes('.')) {
       throw new Error("El formato del email es incorrecto");
     }
 
-    // Verificar longitud mínima de la contraseña
     if (password.length < 6) {
       throw new Error("La contraseña debe tener al menos 6 caracteres");
     }
 
-    // Formato que espera la API (ajustar según la documentación)
     const userData = {
       nombre: nombre,
       email: email,
       password: password
-      // No añadir campos adicionales que la API no espera
     };
 
     console.log("Enviando datos de registro:", JSON.stringify(userData, null, 2));
@@ -141,7 +127,6 @@ const register = async (nombre, email, password) => {
       body: JSON.stringify(userData),
     });
 
-    // Mejorar el manejo de errores
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
       const errorMessage = errorData && errorData.message 
@@ -150,7 +135,6 @@ const register = async (nombre, email, password) => {
       
       console.error("Error respuesta API:", errorMessage);
       
-      // Manejar errores específicos
       if (response.status === 400) {
         if (errorMessage.includes("email")) {
           throw new Error("Este email ya está registrado");
@@ -163,12 +147,10 @@ const register = async (nombre, email, password) => {
 
     const data = await response.json();
     
-    // Verificar que la respuesta contiene el token
     if (!data.token) {
       throw new Error("Respuesta del servidor incompleta");
     }
     
-    // Guardar información del nuevo usuario
     const newUser = {
       id: data.user?.id || extractUserIdFromToken(data.token),
       nombre: nombre,

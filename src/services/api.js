@@ -65,9 +65,7 @@ export const iniciarSesion = async (email, password) => {
     }
 
     const data = await response.json();
-    
-    // Verificar que la respuesta tenga una estructura válida
-    // Un token válido y un objeto usuario con un ID
+
     if (!data.token || !data.user || !data.user.id) {
       console.error("Estructura de respuesta inválida:", data);
       throw new Error("Estructura de autenticación incorrecta");
@@ -195,7 +193,6 @@ export const getCart = async (userId, token) => {
     const data = await response.json();
     console.log("Carrito obtenido de la API:", data);
     
-    // Asegurar que siempre devolvemos un array de objetos con formato consistente
     if (Array.isArray(data)) {
       return data.map(item => ({
         id: item.productoId || item.producto_id,
@@ -215,7 +212,6 @@ export const getCart = async (userId, token) => {
 
 export const saveCart = async (userId, token, item) => {
   try {
-    // Validar que el item tenga productoId antes de enviarlo
     if (!item.productoId) {
       console.error("Error: Intentando guardar item sin productoId:", item);
       throw new Error("El productoId es obligatorio para guardar en el carrito");
@@ -245,10 +241,8 @@ export const saveCart = async (userId, token, item) => {
   }
 };
 
-// Función para eliminar un producto del carrito en el servidor
 export const removeCartItem = async (userId, token, productoId) => {
   try {
-    // Modificar esta URL: quitar "/producto" de la ruta
     const response = await fetch(`${API_BASE_URL}/carritos/${userId}/${productoId}`, {
       method: "DELETE",
       headers: {
@@ -269,8 +263,6 @@ export const removeCartItem = async (userId, token, productoId) => {
   }
 };
 
-// Función para sincronizar todo el carrito (purgar y recrear)
-// Reemplazar la implementación actual de syncFullCart con esta versión
 export const syncFullCart = async (userId, token, cartItems) => {
   try {
     console.log(`Sincronizando carrito para usuario ${userId} con ${cartItems.length} productos`);
@@ -309,15 +301,12 @@ export const guardarPedido = async (userId, cartItems, token) => {
       throw new Error("Datos de pedido incompletos");
     }
 
-    // Formatear los datos EXACTAMENTE como espera el backend
     const pedidoData = {
       usuario_id: userId,
       productos: cartItems.map(item => ({
         id: item.id, // Cambiado de producto_id a id
         cantidad: item.quantity || 1
-        // Eliminados precio y otros campos que no espera el backend
       }))
-      // Eliminados campos direccion_entrega y estado que no espera el backend
     };
 
     console.log("Enviando pedido:", JSON.stringify(pedidoData, null, 2));

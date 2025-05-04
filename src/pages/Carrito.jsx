@@ -3,18 +3,18 @@
  * 2025
  * @author Marcos Vivas
  */
-import React, { useState } from "react";  // Importar useState para manejar isProcessing
+import React, { useState } from "react"; 
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import "../styles/Carrito.css";
-import { guardarPedido } from "../services/api"; // función que envia el pedido a la API
+import { guardarPedido } from "../services/api"; 
 
 const Carrito = () => {
   const { isAuthenticated, isGuest, currentUser } = useAuth();
-  const { cartItems, removeFromCart, updateQuantity, getTotal, clearCart } = useCart(); // Añadir clearCart aquí
+  const { cartItems, removeFromCart, updateQuantity, getTotal, clearCart } = useCart(); 
   const navigate = useNavigate();
-  const [isProcessing, setIsProcessing] = useState(false); // Definir el estado isProcessing
+  const [isProcessing, setIsProcessing] = useState(false); 
 
   const formatPrice = (price) => {
     const numericPrice = parseFloat(price);
@@ -32,13 +32,13 @@ const Carrito = () => {
       }
   
       // Mostrar un mensaje de proceso
-      setIsProcessing(true); // Ahora está definido correctamente
+      setIsProcessing(true);
       
       // Procesar pedido con la función modificada
       await guardarPedido(currentUser.id, cartItems, token);
       
       // Limpiar carrito después de compra exitosa
-      clearCart(); // Ahora está definido correctamente
+      clearCart();
       
       // Navegar a la página de checkout
       navigate("/checkout");
@@ -46,7 +46,7 @@ const Carrito = () => {
       console.error("Error al guardar pedido:", error);
       alert("Hubo un error al procesar el pedido. Inténtalo nuevamente.");
     } finally {
-      setIsProcessing(false); // Ahora está definido correctamente
+      setIsProcessing(false); 
     }
   };
 

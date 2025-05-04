@@ -27,7 +27,7 @@ const Checkout = () => {
     cvv: ""
   });
   
-  const [step, setStep] = useState(1); // 1: Dirección, 2: Pago, 3: Confirmación
+  const [step, setStep] = useState(1); 
   const [envioProcesado, setEnvioProcesado] = useState(false);
   
   const handleChange = (e) => {
@@ -39,13 +39,11 @@ const Checkout = () => {
   };
   
   const validarDireccion = () => {
-    // Validación básica - en producción sería más completa
     const { nombre, apellidos, direccion, ciudad, codigoPostal, telefono } = formData;
     return nombre && apellidos && direccion && ciudad && codigoPostal && telefono;
   };
   
   const validarPago = () => {
-    // Validación básica - en producción sería más completa
     if (formData.metodoPago === "tarjeta") {
       return formData.numeroTarjeta && formData.fechaExpiracion && formData.cvv;
     }
@@ -63,12 +61,10 @@ const Checkout = () => {
   const handleSubmitPago = (e) => {
     e.preventDefault();
     if (validarPago()) {
-      // Simulación de procesamiento de pago
       setEnvioProcesado(true);
       setStep(3);
       window.scrollTo(0, 0);
       
-      // En un escenario real, aquí harías la llamada a la API
       setTimeout(() => {
         clearCart();
       }, 1000);

@@ -16,7 +16,6 @@ const ListaProductos = ({ productos, agregarAlCarrito }) => {
   const openModal = (producto) => {
     setModalProduct(producto);
     setIsModalOpen(true);
-    // Evitar scroll en el body mientras el modal está abierto
     document.body.style.overflow = "hidden";
   };
 
@@ -128,7 +127,7 @@ const ListaProductos = ({ productos, agregarAlCarrito }) => {
         ))}
       </div>
 
-      {/* Modal de Vista Rápida */}
+      {}
       {isModalOpen && modalProduct && (
         <VistaRapida
           producto={modalProduct}
