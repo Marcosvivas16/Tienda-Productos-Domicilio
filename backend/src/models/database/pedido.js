@@ -76,7 +76,7 @@ export class PedidoModel {
       await connection.query(
         `INSERT INTO pedido_productos (pedido_id, producto_id, cantidad)
          VALUES (?, UUID_TO_BIN(?), ?);`,
-        [pedidoId, producto.id, producto.quantity]
+        [pedidoId, producto.id, producto.cantidad]
       )
     }
 
