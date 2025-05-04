@@ -208,21 +208,15 @@ export const getCart = async (userId, token) => {
   }
 };
 
-// Modifica src/services/api.js - función saveCart
 export const saveCart = async (userId, token, item) => {
   try {
-    if (!userId || !token) {
-      console.error("ID de usuario y token son necesarios para guardar el carrito");
-      return;
+    // Validar que el item tenga productoId antes de enviarlo
+    if (!item.productoId) {
+      console.error("Error: Intentando guardar item sin productoId:", item);
+      throw new Error("El productoId es obligatorio para guardar en el carrito");
     }
     
-    // Formatear el objeto de la forma que espera la API
-    const cartItem = {
-      productoId: item.producto_id || item.id,
-      cantidad: item.cantidad || item.quantity || 1
-    };
-    
-    console.log("Enviando al carrito:", JSON.stringify(cartItem, null, 2));
+    console.log("Enviando al carrito:", item);
     
     const response = await fetch(`${API_BASE_URL}/carritos/${userId}`, {
       method: "POST",
@@ -230,7 +224,7 @@ export const saveCart = async (userId, token, item) => {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(cartItem),
+      body: JSON.stringify(item)
     });
 
     if (!response.ok) {
@@ -238,7 +232,7 @@ export const saveCart = async (userId, token, item) => {
       console.error(`Error ${response.status} al guardar carrito: ${errorText}`);
       throw new Error("Error al guardar el carrito");
     }
-    
+
     return await response.json();
   } catch (error) {
     console.error("Error al guardar el carrito:", error);
@@ -271,30 +265,32 @@ export const removeCartItem = async (userId, token, productoId) => {
 };
 
 // Función para sincronizar todo el carrito (purgar y recrear)
-export const syncFullCart = async (userId, token, items) => {
+// Reemplazar la implementación actual de syncFullCart con esta versión
+export const syncFullCart = async (userId, token, cartItems) => {
   try {
-    // Paso 1: Purgar el carrito actual
-    await fetch(`${API_BASE_URL}/carritos/${userId}/purgar`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
+    console.log(`Sincronizando carrito para usuario ${userId} con ${cartItems.length} productos`);
+    
+    // Filtrar solo productos que tienen ID y mapear al formato correcto para la API
+    const validCartItems = cartItems.filter(item => item.id);
+    
+    console.log("Productos válidos para sincronizar:", validCartItems);
+    
+    const addPromises = validCartItems.map(item => {
+      return saveCart(userId, token, {
+        productoId: item.id,
+        cantidad: item.quantity || 1
+      });
     });
     
-    // Paso 2: Si no hay items, terminamos aquí
-    if (!items || items.length === 0) return;
-    
-    // Paso 3: Añadir cada producto al carrito
-    for (const item of items) {
-      await saveCart(userId, token, {
-        producto_id: item.id,
-        cantidad: item.quantity
-      });
+    if (addPromises.length === 0) {
+      console.log("No hay productos válidos para sincronizar");
+      return true;
     }
     
-    return { success: true };
+    await Promise.all(addPromises);
+    return true;
   } catch (error) {
-    console.error("Error al sincronizar el carrito:", error);
+    console.error("Error en syncFullCart:", error);
     throw error;
   }
 };

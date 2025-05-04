@@ -26,23 +26,12 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
-    try {
-      // Si hay usuario autenticado, intentar sincronizar el carrito
-      if (currentUser && currentUser.id && isAuthenticated()) {
-        const token = localStorage.getItem('token');
-        const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-        
-        // Sincronizar con carrito vacío para limpiar
-        await syncFullCart(currentUser.id, token, []);
-      }
-    } catch (error) {
-      console.error("Error al sincronizar durante logout:", error);
-    } finally {
-      // Continuar con el proceso normal de logout
+      // Importante: NO intentamos sincronizar con el servidor durante el logout
+      // Solo limpiamos localStorage y el estado
       localStorage.removeItem("usuario");
       localStorage.removeItem("token");
+      localStorage.removeItem("cartItems"); // Limpiar carrito local también
       setCurrentUser(null);
-    }
   };
   
 const login = async (email, password) => {

@@ -1,114 +1,124 @@
 import React, { createContext, useState, useEffect, useContext, useRef } from "react";
 import { useAuth } from "./AuthContext";
-import { getCart, syncFullCart, removeCartItem } from "../services/api";
+import { getCart, saveCart, removeCartItem } from "../services/api";
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { currentUser, isAuthenticated } = useAuth();
   
-  // Referencia para controlar si estamos cargando el carrito inicialmente
-  const initialLoadRef = useRef(true);
-  // Referencia para saber cuándo se modifica manualmente el carrito
-  const manualUpdateRef = useRef(false);
+  // Referencia para controlar actualizaciones manuales - ahora guarda el producto específico
+  const manualUpdateRef = useRef(null);
+  // Referencia para controlar la sincronización
+  const syncTimeoutRef = useRef(null);
 
-  // Cargar carrito del servidor solo para usuarios autenticados
+  // Cargar el carrito del servidor cuando cambia el usuario
   useEffect(() => {
-    const fetchCart = async () => {
+    const loadCartFromServer = async () => {
+      // Si no hay usuario autenticado, no cargar carrito
+      if (!currentUser || !currentUser.id || !isAuthenticated()) {
+        setCartItems([]);
+        setLoading(false);
+        return;
+      }
+      
       try {
-        if (!currentUser || !currentUser.id || !isAuthenticated()) {
-          setCartItems([]); // Carrito vacío para usuarios no autenticados
-          setLoading(false);
-          return;
-        }
-        
         setLoading(true);
-        initialLoadRef.current = true; // Marcamos que estamos en carga inicial
-        
         console.log(`Cargando carrito del servidor para usuario: ${currentUser.id}`);
+        
         const token = localStorage.getItem('token');
         const serverCart = await getCart(currentUser.id, token);
         
-        if (serverCart && serverCart.length > 0) {
+        if (serverCart && Array.isArray(serverCart)) {
           setCartItems(serverCart);
           console.log("Carrito cargado del servidor:", serverCart);
         } else {
-          setCartItems([]); // Carrito vacío si no hay items
+          setCartItems([]);
+          console.log("No se encontró carrito en el servidor, inicializado vacío");
         }
       } catch (error) {
-        console.error("Error al obtener el carrito:", error);
-        setCartItems([]); // En caso de error, carrito vacío
+        console.error("Error al cargar el carrito del servidor:", error);
+        setCartItems([]);
       } finally {
         setLoading(false);
-        // Después de cargar completamente, desactivamos el flag de carga inicial
-        setTimeout(() => {
-          initialLoadRef.current = false;
-        }, 500); // Pequeño retraso para asegurar que el estado se actualiza completamente
       }
     };
-    
-    fetchCart();
+
+    loadCartFromServer();
   }, [currentUser, isAuthenticated]);
 
-  // Guardar cambios en el carrito solo cuando se modifica manualmente
+  // Sincronizar cambios en el carrito con el servidor - MODIFICADO para sincronizar solo el producto que cambió
   useEffect(() => {
-    const updateCart = async () => {
-      // No hacer nada si:
-      // 1. Estamos en carga inicial
-      // 2. No hay items en el carrito
-      // 3. No hay usuario autenticado
-      // 4. No se ha realizado una actualización manual
-      if (
-        initialLoadRef.current || 
-        cartItems.length === 0 || 
-        !currentUser || 
-        !currentUser.id || 
-        !isAuthenticated() ||
-        !manualUpdateRef.current
-      ) {
-        return;
-      }
-
+    // No sincronizar si no hay actualización pendiente
+    if (!currentUser?.id || !isAuthenticated() || !manualUpdateRef.current) {
+      return;
+    }
+    
+    // Limpiar timeout anterior si existe
+    if (syncTimeoutRef.current) {
+      clearTimeout(syncTimeoutRef.current);
+    }
+    
+    // Debounce para la sincronización
+    syncTimeoutRef.current = setTimeout(async () => {
       try {
+        // Obtener el producto que cambió
+        const productToSync = manualUpdateRef.current;
+        console.log(`Sincronizando producto: ${productToSync.id} para usuario ${currentUser.id}`);
+        
         const token = localStorage.getItem('token');
-        console.log(`Sincronizando carrito completo para ${currentUser.id}`);
         
-        // Sincronizar el carrito completo con el servidor
-        await syncFullCart(currentUser.id, token, cartItems);
+        // Sincronizar SOLO el producto que cambió
+        await saveCart(currentUser.id, token, {
+          productoId: productToSync.id,
+          cantidad: productToSync.quantity || 1
+        });
         
-        // Resetear el flag de actualización manual
-        manualUpdateRef.current = false;
-        
-        console.log("Carrito sincronizado correctamente");
+        console.log("Producto sincronizado correctamente");
       } catch (error) {
-        console.error("Error al sincronizar el carrito:", error);
+        console.error("Error al sincronizar producto:", error);
+      } finally {
+        manualUpdateRef.current = null; // Resetear después de sincronizar
+      }
+    }, 500);
+    
+    return () => {
+      if (syncTimeoutRef.current) {
+        clearTimeout(syncTimeoutRef.current);
       }
     };
-    
-    updateCart();
-  }, [cartItems, currentUser, isAuthenticated]);
+  }, [manualUpdateRef.current, currentUser, isAuthenticated]);
 
-  // Implementación de addToCart
+  // Añadir producto al carrito - MODIFICADO
   const addToCart = (product, quantity = 1) => {
-    // Solo permitir añadir productos si el usuario está autenticado
     if (!currentUser || !isAuthenticated()) {
       console.log("Solo usuarios autenticados pueden añadir productos al carrito");
       return;
     }
     
-    // Marcar que se está realizando una actualización manual
-    manualUpdateRef.current = true;
+    // Verificar que el producto tenga ID
+    if (!product || !product.id) {
+      console.error("Error: Intentando añadir producto sin ID");
+      return;
+    }
+    
+    // Guardar el producto que se va a sincronizar
+    manualUpdateRef.current = {
+      id: product.id,
+      quantity: quantity
+    };
     
     setCartItems(prevItems => {
       const exists = prevItems.find(item => item.id === product.id);
       
       if (exists) {
+        // Actualizar cantidad (sin acumular)
         return prevItems.map(item => 
           item.id === product.id 
-            ? { ...item, quantity: item.quantity + quantity } 
+            ? { ...item, quantity: quantity } 
             : item
         );
       } else {
@@ -120,12 +130,15 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Implementación de removeFromCart
+  // Eliminar producto del carrito - MODIFICADO
   const removeFromCart = (productId) => {
-    // Marcar que se está realizando una actualización manual
-    manualUpdateRef.current = true;
+    // Validar parámetro
+    if (!productId) {
+      console.error("Error: ID de producto no válido para eliminar");
+      return;
+    }
     
-    // Si el usuario está autenticado, eliminar del servidor también
+    // Eliminar del servidor directamente
     if (currentUser && currentUser.id && isAuthenticated()) {
       const token = localStorage.getItem('token');
       try {
@@ -136,20 +149,31 @@ export const CartProvider = ({ children }) => {
       }
     }
     
+    // No usar manualUpdateRef aquí porque removeCartItem ya hace la sincronización
+    
     // Eliminar localmente
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
   };
 
-  // Implementación de updateQuantity
+  // Actualizar cantidad de un producto - MODIFICADO
   const updateQuantity = (productId, newQuantity) => {
-    // Marcar que se está realizando una actualización manual
-    manualUpdateRef.current = true;
+    // Validar parámetros
+    if (!productId || typeof newQuantity !== 'number') {
+      console.error("Error: Parámetros inválidos para actualizar cantidad");
+      return;
+    }
     
     // Si la cantidad es 0 o negativa, eliminar el producto
     if (newQuantity <= 0) {
       removeFromCart(productId);
       return;
     }
+    
+    // Guardar el producto que se va a sincronizar
+    manualUpdateRef.current = {
+      id: productId,
+      quantity: newQuantity
+    };
     
     // Actualizar la cantidad
     setCartItems(prevItems => 
@@ -161,31 +185,28 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Función para calcular el total del carrito
+  // Calcular total del carrito - SIN CAMBIOS
   const getTotal = () => {
     return cartItems.reduce((total, item) => {
-      return total + (item.precio * item.quantity);
+      const precio = parseFloat(item.precio) || 0;
+      return total + (precio * (item.quantity || 1));
     }, 0);
   };
 
-  // Función para limpiar el carrito
+  // Limpiar carrito - MODIFICADO
   const clearCart = () => {
-    // Marcar que se está realizando una actualización manual
-    manualUpdateRef.current = true;
-    
-    // Si el usuario está autenticado, purgar el carrito en el servidor
-    if (currentUser && currentUser.id && isAuthenticated()) {
-      const token = localStorage.getItem('token');
-      syncFullCart(currentUser.id, token, [])
-        .catch(error => console.error("Error al purgar el carrito:", error));
-    }
-    
+    // No intentar sincronizar el borrado completo
+    // Solo limpiar el estado local
     setCartItems([]);
+    console.log("Carrito limpiado localmente");
+    
+    // No se establece manualUpdateRef porque no queremos sincronización
   };
 
   return (
     <CartContext.Provider value={{
       cartItems,
+      setCartItems,
       loading,
       addToCart,
       removeFromCart,
