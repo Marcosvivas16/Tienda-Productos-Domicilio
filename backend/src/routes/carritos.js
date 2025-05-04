@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import { Router } from "express";
 import { CarritoController } from "../controllers/carritos.js";
 import { authenticateJWT } from "../middlewares/auth.js";

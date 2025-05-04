@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import { validateProducto, validatePartialProducto } from '../schemes/productos.js'
 
 export class ProductoController {

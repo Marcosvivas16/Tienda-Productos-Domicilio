@@ -1,3 +1,9 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
+
 import { validateCarrito, validatePartialCarrito } from '../schemes/carritos.js'
 
 export class CarritoController {

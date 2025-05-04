@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import { createApp } from './app.js'
 import { ProductoModel } from './models/database/producto.js'
 import { UsuarioModel } from './models/database/usuario.js'

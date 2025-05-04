@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import mysql from 'mysql2/promise'
 import dotenv from 'dotenv'
 

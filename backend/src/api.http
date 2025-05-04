@@ -1,4 +1,9 @@
-# PRODUCTOS
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
+ # PRODUCTOS
 
 ### Recuperar productos
 GET http://155.210.71.196:1234/productos

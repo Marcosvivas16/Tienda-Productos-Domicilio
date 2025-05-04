@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import cors from 'cors'
 
 const ACCEPTED_ORIGINS = [

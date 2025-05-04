@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import { randomUUID } from 'node:crypto';
 import { readJSON, writeJSON, resolvePath } from '../../utils.js';
 import bcrypt from 'bcryptjs';

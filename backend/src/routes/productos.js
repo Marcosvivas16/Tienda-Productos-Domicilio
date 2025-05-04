@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import { Router } from "express";
 import { ProductoController } from "../controllers/productos.js";
 

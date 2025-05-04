@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import express, { json } from 'express'
 import cookieParser from 'cookie-parser'
 import { createProductoRouter } from './routes/productos.js'

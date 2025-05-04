@@ -1,3 +1,8 @@
+/**
+ * Proyecto Software
+ * 2025
+ * @author Diego Vallespin & Hatim Bajji
+ */
 import request from 'supertest';
 import { expect } from 'chai';
 import { createApp } from '../src/app.js';
