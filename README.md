@@ -106,6 +106,14 @@ A continuación se muestra el avance real del proyecto:
 
 ---
 
+## 📅 Diagrama de Gantt (Actualizado a 5 de Mayo de 2025)
+
+A continuación se muestra el avance real del proyecto:
+### 🔹 Desarrollo, Pruebas y Entrega
+![Diagrama Gantt](docs/planificacion/diagrama_gantt_final.png)
+
+---
+
 ## 📸 Diseño de la Aplicación
 
 ### 🏠 Página de Inicio
