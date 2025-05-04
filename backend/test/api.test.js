@@ -109,24 +109,21 @@ describe('Casos de Prueba de la API', () => {
       .send({
         usuario_id: userId,
         productos: [
-          { producto_id: productoId, cantidad: 2 }
+          { id: productoId, cantidad: 2 }
         ]
       });
-      console.log(res.body);
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property('id');
     pedidoId = res.body.id;
   });
 
-  // 8. Borrar un Pedido
-  it('debería borrar un pedido correctamente', async () => {
-    if (!pedidoId) this.skip();
-
+  // 8. Ver un pedido de un usuario
+  it('debería ver un pedido de un usuario correctamente', async () => {
     const res = await request(app)
-      .delete(`/pedidos/${pedidoId}`)
+      .get(`/pedidos/usuario/${userId}`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).to.equal(200);
-    expect(res.body).to.have.property('message', 'Pedido eliminado');
+    expect(res.body[0]).to.have.property('usuario_id', userId);
   });
 });
