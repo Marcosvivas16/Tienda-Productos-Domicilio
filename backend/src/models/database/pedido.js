@@ -19,14 +19,14 @@ const connection = await mysql.createConnection(config)
 export class PedidoModel {
   static async getAll () {
     const [pedidos] = await connection.query(
-      `SELECT id, usuario_id, fecha, direccion, total FROM pedidos`
+      `SELECT id, BIN_TO_UUID(usuario_id) AS usuario_id, fecha, direccion, total FROM pedidos`
     )
     return pedidos
   }
 
   static async getById ({ id }) {
     const [pedidos] = await connection.query(
-      `SELECT id, usuario_id, fecha, direccion, total FROM pedidos WHERE id = ?;`,
+      `SELECT id, BIN_TO_UUID(usuario_id) AS usuario_id, fecha, direccion, total FROM pedidos WHERE id = ?;`,
       [id]
     )
     if (pedidos.length === 0) return null
@@ -35,9 +35,9 @@ export class PedidoModel {
 
   static async getByUsuario ({ usuarioId }) {
     const [pedidos] = await connection.query(
-      `SELECT id, usuario_id, fecha, direccion, total
+      `SELECT id, BIN_TO_UUID(usuario_id) AS usuario_id, fecha, direccion, total
        FROM pedidos
-       WHERE usuario_id = ?
+       WHERE usuario_id = UUID_TO_BIN(?)
        ORDER BY fecha DESC`,
       [usuarioId]
     )
@@ -46,7 +46,6 @@ export class PedidoModel {
 
   static async create ({ input }) {
     const { usuario_id, direccion, productos } = input
-
     let total = 0
 
     for (const producto of productos) {
@@ -61,29 +60,28 @@ export class PedidoModel {
 
       const precioUnitario = result[0].precio
       total += precioUnitario * producto.cantidad
-}
+    }
+
     const fecha = new Date()
 
-    // Insertar el pedido
     const [result] = await connection.query(
       `INSERT INTO pedidos (usuario_id, fecha, direccion, total)
-       VALUES (?, ?, ?, ?);`,
+       VALUES (UUID_TO_BIN(?), ?, ?, ?);`,
       [usuario_id, fecha, direccion, total]
     )
 
     const pedidoId = result.insertId
 
-    // Insertar los productos relacionados
     for (const producto of productos) {
       await connection.query(
         `INSERT INTO pedido_productos (pedido_id, producto_id, cantidad)
-         VALUES (?, ?, ?);`,
+         VALUES (?, UUID_TO_BIN(?), ?);`,
         [pedidoId, producto.id, producto.quantity]
       )
     }
 
     const [nuevoPedido] = await connection.query(
-      `SELECT id, usuario_id, fecha, direccion, total FROM pedidos WHERE id = ?;`,
+      `SELECT id, BIN_TO_UUID(usuario_id) AS usuario_id, fecha, direccion, total FROM pedidos WHERE id = ?;`,
       [pedidoId]
     )
 
