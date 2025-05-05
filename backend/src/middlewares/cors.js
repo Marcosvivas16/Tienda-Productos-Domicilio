@@ -6,6 +6,7 @@
 import cors from 'cors'
 
 const ACCEPTED_ORIGINS = [
+    'http://155.210.71.196:3000',
     'http://localhost:3000',
     'http://localhost:1234'
   ]
